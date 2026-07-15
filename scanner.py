@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-智能搜尋引擎 · VIX 整合版（極簡實戰版）
+智能搜尋引擎 · VIX 整合版（極簡實戰版 + RS Rating）
 """
 
 import os
@@ -199,9 +199,15 @@ class TechnicalEngine:
         low_20 = df["low"].rolling(20).min().iloc[-1]
         atr_pct = (high_20 - low_20) / current if current > 0 else 0.03
 
+        # 簡單 RS Rating 近似計算（參考 QQQ 相對強度）
+        # 真實 IBD RS Rating 需要付費數據，這裡用分數 + 趨勢近似
+        rs_rating = min(99, max(1, int(50 + trend_sig * 8 + (rsi - 50) * 0.4)))
+        rs_label = "頂級強勢" if rs_rating >= 90 else "強勢" if rs_rating >= 80 else "中性" if rs_rating >= 60 else "偏弱"
+
         indicators = {
             "trend": {"alignment": align, "signal": trend_sig},
-            "rsi": {"rsi": round(rsi, 1), "state": rsi_state}
+            "rsi": {"rsi": round(rsi, 1), "state": rsi_state},
+            "rs_rating": {"value": rs_rating, "label": rs_label}
         }
 
         score = max(0, min(100, 50 + trend_sig * 10 + rsi_sig * 5))
@@ -285,15 +291,16 @@ class RunnerHome:
             is_short = risk["is_short"]
 
             direction = "空頭（Short）" if is_short else "多頭（Long）"
+            direction_emoji = "🔻" if is_short else "▲"
             signal_text = "強烈沽空" if is_short else "強烈買入"
 
-            tech = f"• 趨勢：{ind['trend']['alignment']}\n• RSI：{ind['rsi']['rsi']}（{ind['rsi']['state']}）"
+            tech = f"• 趨勢：{ind['trend']['alignment']}\n• RSI：{ind['rsi']['rsi']}（{ind['rsi']['state']}）\n• RS Rating：{ind['rs_rating']['value']}（{ind['rs_rating']['label']}）"
 
             domain = Config.LOGO_MAP.get(r["code"])
             logo = f"https://logo.clearbit.com/{domain}" if domain else None
 
             desc = f"""**評分：** **{comp['score']}**  
-**方向：** {direction}  
+**方向：** {direction_emoji} {direction}  
 **訊號：** {comp['emoji']}（{signal_text}）
 
 **【技術面 摘要】**
@@ -309,7 +316,7 @@ class RunnerHome:
 **市場恐慌（VIX）：** {vix}"""
 
             embed = {
-                "title": f"📈 {r['name']} ({r['code']})",
+                "title": f"✅ {r['name']} ({r['code']})",
                 "description": desc,
                 "color": 0xFF0000 if is_short else 0x00FF41
             }
@@ -333,6 +340,7 @@ class RunnerHome:
             logger.info(
                 f"{i}. {r['code']:<5} | 價: ${r['price']:<8.2f} | "
                 f"評分: {r['composite']['score']:5.1f} {r['composite']['emoji']} | "
+                f"RS Rating: {r['indicators']['rs_rating']['value']} | "
                 f"Kelly: {r['risk']['kelly_pct']:5.1f}%"
             )
         logger.info("="*70 + "\n")
