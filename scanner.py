@@ -282,29 +282,38 @@ class RunnerHome:
         embeds = []
         for r in top:
             comp, risk, ind = r["composite"], r["risk"], r["indicators"]
-            direction = "🔻 空頭" if risk["is_short"] else "🔺 多頭"
+            is_short = risk["is_short"]
+
+            # 方向與訊號文字
+            direction = "空頭（Short）" if is_short else "多頭（Long）"
+            signal_text = "強烈沽空" if is_short else "強烈買入"
 
             tech = f"• 趨勢：`{ind['trend']['alignment']}`\n• RSI：`{ind['rsi']['rsi']}` ({ind['rsi']['state']})"
-            
+
             domain = Config.LOGO_MAP.get(r["code"])
             logo = f"https://logo.clearbit.com/{domain}" if domain else None
 
-            desc = f"""{comp['emoji']} **評分：** `{comp['score']}/100`
-**方向：** {direction} | **建議：** `{comp['recommendation']}`
+            # 新格式描述
+            desc = f"""**評分：** **`{comp['score']}`**  
+**方向：** {direction}  
+**訊號：** {comp['emoji']}（{signal_text}）
 
-**【技術面】**
+**【技術面 摘要】**
 {tech}
 
 **【風險控制】**
-現價：`${r['price']:,.2f}` | 入場：`${risk['entry']:,.2f}`
-止盈：`${risk['take_profit']:,.2f}` | 止損：`${risk['stop_loss']:,.2f}`
+• 現價：`${r['price']:,.2f}`
+• 入場：`${risk['entry']:,.2f}`
+• 止盈：`${risk['take_profit']:,.2f}`
+• 止損：`${risk['stop_loss']:,.2f}`
 
-🛡️ **建議倉位**：`{risk['kelly_pct']:.1f}%` ({risk['risk_note']})"""
+**建議倉位：** `{risk['kelly_pct']:.1f}%`  
+**市場恐慌（VIX）：** `{vix}`"""
 
             embed = {
                 "title": f"📈 {r['name']} ({r['code']})",
                 "description": desc,
-                "color": 0xFF0000 if risk["is_short"] else 0x00FF41
+                "color": 0xFF0000 if is_short else 0x00FF41
             }
             if logo:
                 embed["thumbnail"] = {"url": logo}
