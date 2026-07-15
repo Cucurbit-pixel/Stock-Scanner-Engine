@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 """
-智能搜尋引擎 v7.2（已修復 KeyError: 'emoji'）
+智能搜尋引擎 v7.2（完整版 + 儲存 JSON 給 Streamlit 用）
 """
 
 import os
 import sys
+import json
 import logging
 import threading
 import warnings
 import concurrent.futures
+from datetime import datetime
 from typing import Any, Dict, List, Tuple, Optional
 
 import requests
@@ -389,11 +391,26 @@ class RunnerHome:
             logger.error(f"Discord 推送失敗: {e}")
 
 
+def save_results_to_json(results: list, vix: float):
+    """儲存最新掃描結果，供 Streamlit 使用"""
+    data = {
+        "scan_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "vix": vix,
+        "total_stocks": len(results),
+        "triggered_count": len([r for r in results if r["composite"]["score"] >= Config.NOTIFY_THRESHOLD]),
+        "results": results
+    }
+    with open("latest_scan.json", "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    logger.info("已儲存最新掃描結果到 latest_scan.json")
+
+
 def main():
     if os.environ.get("GITHUB_ACTIONS") == "true":
         logger.info("🤖 智能搜尋引擎 v7.2 啟動")
         results, vix = WorkflowMapper.trigger_run()
         RunnerHome.runner_cowork_discord(results, vix)
+        save_results_to_json(results, vix)
     else:
         logger.warning("請使用 GitHub Actions 運行")
 
