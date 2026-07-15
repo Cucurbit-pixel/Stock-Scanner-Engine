@@ -1,0 +1,28 @@
+name: Daily Stock Scan
+
+on:
+  schedule:
+    # 香港時間每天晚上 10:00 左右運行（可自行調整）
+    - cron: '0 14 * * *'   # UTC 時間 14:00 = 香港時間 22:00
+  workflow_dispatch:       # 允許手動觸發測試
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install pandas requests
+
+      - name: Run stock scanner
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python scanner.py
