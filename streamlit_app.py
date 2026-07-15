@@ -4,6 +4,24 @@ from datetime import datetime, timedelta
 
 st.set_page_config(page_title="美股智能掃描器", page_icon="📈", layout="wide")
 
+# ===================== 深紫色主題 =====================
+st.markdown("""
+<style>
+    .stApp {
+        background-color: #1a1625;
+    }
+    .stButton button {
+        background-color: #6b46c1;
+        color: white;
+    }
+    .stMetric {
+        background-color: #2d2640;
+        border-radius: 10px;
+        padding: 10px;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # 自動刷新
 st.markdown("""<meta http-equiv="refresh" content="90">""", unsafe_allow_html=True)
 
@@ -13,12 +31,11 @@ st.caption("每日自動掃描 + Discord 警報 + 風險控制")
 if st.button("🔄 手動刷新", use_container_width=True):
     st.rerun()
 
-# ===================== Greed & Fear Index（置中 + 更好看） =====================
+# ===================== Greed & Fear Index（置中） =====================
 st.subheader("市場情緒指數（CNN Greed & Fear）")
 
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    # 暫時用固定值 50 做示範（之後可以接真實 API）
     fear_greed = 50
     st.metric("Greed & Fear Index", f"{fear_greed} ⚪")
     st.markdown("**目前狀態：中性**")
@@ -53,15 +70,13 @@ else:
             ticker = stock['code'].lower()
             logo_url = f"https://logo.clearbit.com/{ticker}.com"
 
-            # Logo + 名稱
-            col1, col2 = st.columns([1, 5])
-            with col1:
+            col_logo, col_name = st.columns([1, 5])
+            with col_logo:
                 try:
                     st.image(logo_url, width=38)
                 except:
                     st.write("📈")
-
-            with col2:
+            with col_name:
                 st.markdown(f"**{stock['name']} ({stock['code']})**")
 
             score = stock['composite']['score']
