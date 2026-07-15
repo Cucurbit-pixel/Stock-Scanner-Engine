@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 st.set_page_config(page_title="美股智能掃描器", page_icon="📈", layout="wide")
 
-# ===================== 深紫色主題 =====================
+# 深紫色主題
 st.markdown("""
 <style>
     .stApp { background-color: #1a1625; }
@@ -20,15 +20,14 @@ st.caption("每日自動掃描 + Discord 警報 + 風險控制")
 if st.button("🔄 手動刷新", use_container_width=True):
     st.rerun()
 
-# ===================== Greed & Fear（置中） =====================
+# Greed & Fear（置中）
 st.subheader("市場情緒指數（CNN Greed & Fear）")
-
 _, col, _ = st.columns([1, 2, 1])
 with col:
     st.metric("Greed & Fear Index", "50 ⚪")
     st.markdown("**目前狀態：中性**")
 
-# ===================== 載入數據 =====================
+# 載入數據
 try:
     with open("latest_scan.json", "r", encoding="utf-8") as f:
         data = json.load(f)
