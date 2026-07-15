@@ -4,18 +4,18 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 
-st.set_page_config(page_title="美股智能掃描器", page_icon="📈", layout="wide")
+st.set_page_config(page_title="智能美股掃描器", page_icon="📈", layout="wide")
 
 # ===================== 自動刷新 =====================
 st.markdown("""<meta http-equiv="refresh" content="90">""", unsafe_allow_html=True)
 
-st.title("📊 Daily Automation Update")
-st.caption("自動掃描 + Discord 警報 + 風險控制")
+st.title("📊 Automation Stock Scan")
+st.caption("每日自動掃描 + Discord 警報 + 風險控制")
 
 if st.button("🔄 手動刷新", use_container_width=True):
     st.rerun()
 
-# ===================== 真實 CNN Greed & Fear Index =====================
+# ===================== 真實 CNN Greed & Fear Index（優化顯示） =====================
 @st.cache_data(ttl=3600)
 def get_fear_greed_index():
     try:
@@ -23,31 +23,49 @@ def get_fear_greed_index():
         headers = {"User-Agent": "Mozilla/5.0"}
         response = requests.get(url, headers=headers, timeout=10)
         soup = BeautifulSoup(response.text, "html.parser")
-        
-        # CNN 頁面結構有時會變，以下係常見抓取方式
         fear_greed = soup.find("div", {"class": "fear-greed-index"})
         if fear_greed:
             value = fear_greed.find("span", {"class": "index-value"}).text.strip()
             return int(value)
-        else:
-            return 50  # 預設中性
+        return 50
     except:
         return 50
 
 fear_greed_value = get_fear_greed_index()
 
-# 顯示 Fear & Greed 大卡片
+# Fear & Greed 大卡片
 st.subheader("市場情緒指數（CNN Greed & Fear）")
-col1, col2 = st.columns([1, 3])
+
+col1, col2 = st.columns([1.2, 3])
 with col1:
-    st.metric("Greed & Fear Index", fear_greed_value)
-with col2:
     if fear_greed_value >= 75:
-        st.success("極度貪婪（極度樂觀）")
-    elif fear_greed_value >= 50:
-        st.info("貪婪 / 中性")
+        color = "🟢"
+        status = "極度貪婪"
+    elif fear_greed_value >= 55:
+        color = "🟡"
+        status = "貪婪"
+    elif fear_greed_value >= 45:
+        color = "⚪"
+        status = "中性"
+    elif fear_greed_value >= 25:
+        color = "🟠"
+        status = "恐懼"
     else:
-        st.warning("恐懼（市場悲觀）")
+        color = "🔴"
+        status = "極度恐懼"
+
+    st.metric(label="Greed & Fear Index", value=f"{fear_greed_value} {color}")
+
+with col2:
+    st.markdown(f"**目前狀態：{status}**")
+    if fear_greed_value >= 75:
+        st.success("市場極度樂觀，注意回調風險")
+    elif fear_greed_value >= 55:
+        st.info("市場偏樂觀，可適當進場")
+    elif fear_greed_value >= 45:
+        st.warning("市場中性，觀望為主")
+    else:
+        st.error("市場恐慌，可留意反彈機會")
 
 # ===================== 載入掃描結果 =====================
 try:
@@ -80,14 +98,17 @@ else:
     for idx, stock in enumerate(triggered):
         with cols[idx % 2]:
             with st.container(border=True):
-                # ===================== 公司 Logo =====================
                 ticker = stock['code'].lower()
                 logo_url = f"https://logo.clearbit.com/{ticker}.com"
-                
-                col_logo, col_info = st.columns([1, 4])
+
+                # Logo + 股票名稱
+                col_logo, col_name = st.columns([1, 5])
                 with col_logo:
-                    st.image(logo_url, width=50)
-                with col_info:
+                    try:
+                        st.image(logo_url, width=45)
+                    except:
+                        st.write("📈")
+                with col_name:
                     st.markdown(f"**{stock['name']} ({stock['code']})**")
 
                 score = stock['composite']['score']
