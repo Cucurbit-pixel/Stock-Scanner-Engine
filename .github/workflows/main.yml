@@ -5,12 +5,17 @@ on:
     - cron: '0 14 * * *'   # 香港時間每天晚上 10:00 左右
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   scan:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -31,5 +36,5 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add latest_scan.json
-          git commit -m "Update latest_scan.json [skip ci]" || echo "No changes"
+          git commit -m "Update latest_scan.json [skip ci]" || echo "No changes to commit"
           git push
