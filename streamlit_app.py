@@ -7,22 +7,12 @@ st.set_page_config(page_title="美股智能掃描器", page_icon="📈", layout=
 # ===================== 深紫色主題 =====================
 st.markdown("""
 <style>
-    .stApp {
-        background-color: #1a1625;
-    }
-    .stButton button {
-        background-color: #6b46c1;
-        color: white;
-    }
-    .stMetric {
-        background-color: #2d2640;
-        border-radius: 10px;
-        padding: 10px;
-    }
+    .stApp { background-color: #1a1625; }
+    .stMetric { background-color: #2d2640; border-radius: 12px; padding: 8px; }
+    .stButton button { background-color: #6b46c1; color: white; }
 </style>
 """, unsafe_allow_html=True)
 
-# 自動刷新
 st.markdown("""<meta http-equiv="refresh" content="90">""", unsafe_allow_html=True)
 
 st.title("📊 美股每日智能掃描")
@@ -31,16 +21,16 @@ st.caption("每日自動掃描 + Discord 警報 + 風險控制")
 if st.button("🔄 手動刷新", use_container_width=True):
     st.rerun()
 
-# ===================== Greed & Fear Index（置中） =====================
+# ===================== Greed & Fear（強制置中） =====================
 st.subheader("市場情緒指數（CNN Greed & Fear）")
 
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
+_, center_col, _ = st.columns([1, 2, 1])
+with center_col:
     fear_greed = 50
     st.metric("Greed & Fear Index", f"{fear_greed} ⚪")
     st.markdown("**目前狀態：中性**")
 
-# ===================== 載入掃描結果 =====================
+# ===================== 載入數據 =====================
 try:
     with open("latest_scan.json", "r", encoding="utf-8") as f:
         data = json.load(f)
@@ -50,9 +40,8 @@ except:
 
 # 時間轉香港時間
 try:
-    utc_time = datetime.strptime(data['scan_time'], "%Y-%m-%d %H:%M:%S")
-    hkt_time = utc_time + timedelta(hours=8)
-    display_time = hkt_time.strftime("%Y-%m-%d %H:%M:%S")
+    utc = datetime.strptime(data['scan_time'], "%Y-%m-%d %H:%M:%S")
+    display_time = (utc + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
 except:
     display_time = data['scan_time']
 
@@ -70,10 +59,11 @@ else:
             ticker = stock['code'].lower()
             logo_url = f"https://logo.clearbit.com/{ticker}.com"
 
-            col_logo, col_name = st.columns([1, 5])
+            # Logo + 名稱（更緊湊）
+            col_logo, col_name = st.columns([1, 6])
             with col_logo:
                 try:
-                    st.image(logo_url, width=38)
+                    st.image(logo_url, width=36)
                 except:
                     st.write("📈")
             with col_name:
@@ -86,8 +76,7 @@ else:
             with c1:
                 st.metric("評分", score)
             with c2:
-                direction = "🔺 多頭" if is_bullish else "🔻 空頭"
-                st.metric("方向", direction)
+                st.metric("方向", "🔺 多頭" if is_bullish else "🔻 空頭")
             with c3:
                 st.metric("倉位", f"{stock['risk']['kelly_pct']}%")
 
