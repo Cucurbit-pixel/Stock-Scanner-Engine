@@ -9,7 +9,6 @@ st.markdown("""
 <style>
     .stApp { background-color: #1a1625; }
     .stMetric { background-color: #2d2640; border-radius: 12px; padding: 8px; }
-    .stButton button { background-color: #6b46c1; color: white; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -21,13 +20,12 @@ st.caption("每日自動掃描 + Discord 警報 + 風險控制")
 if st.button("🔄 手動刷新", use_container_width=True):
     st.rerun()
 
-# ===================== Greed & Fear（強制置中） =====================
+# ===================== Greed & Fear（置中） =====================
 st.subheader("市場情緒指數（CNN Greed & Fear）")
 
-_, center_col, _ = st.columns([1, 2, 1])
-with center_col:
-    fear_greed = 50
-    st.metric("Greed & Fear Index", f"{fear_greed} ⚪")
+_, col, _ = st.columns([1, 2, 1])
+with col:
+    st.metric("Greed & Fear Index", "50 ⚪")
     st.markdown("**目前狀態：中性**")
 
 # ===================== 載入數據 =====================
@@ -59,8 +57,7 @@ else:
             ticker = stock['code'].lower()
             logo_url = f"https://logo.clearbit.com/{ticker}.com"
 
-            # Logo + 名稱（更緊湊）
-            col_logo, col_name = st.columns([1, 6])
+            col_logo, col_name = st.columns([1, 5])
             with col_logo:
                 try:
                     st.image(logo_url, width=36)
