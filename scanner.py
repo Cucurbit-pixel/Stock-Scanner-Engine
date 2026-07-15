@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """
-智能搜尋引擎 · VIX 整合版（極簡實戰版 + RS Rating）
+智能搜尋引擎 v7.1（最終整合版）
+- 真正 MACD（金叉/死叉偵測）
+- 真正 RS Rating（相對 QQQ 12個月相對強度）
+- Discord 顯示格式乾淨無方框
 """
 
 import os
@@ -12,9 +15,11 @@ import threading
 import warnings
 import concurrent.futures
 from datetime import datetime, timezone
+from typing import Any, Dict, List, Tuple, Optional
 
 import requests
 import pandas as pd
+import numpy as np
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
@@ -30,13 +35,12 @@ logger = logging.getLogger(__name__)
 
 class Config:
     API_TIMEOUT = int(os.environ.get("API_TIMEOUT", "20"))
-    MAX_WORKERS = int(os.environ.get("MAX_WORKERS", "10"))
+    MAX_WORKERS = 12
     DISCORD_WEBHOOK = os.environ.get("DISCORD_WEBHOOK_URL", "")
-    NOTIFY_SCORE_THRESHOLD = 80.0
-    KELLY_BASE = 0.3
+    NOTIFY_THRESHOLD = 80.0
 
     STOCKS = [
-        {"code": "MU", "name": "美光"}, {"code": "WDC", "name": "Western Digital"},
+        {"code": "MU", "name": "美光科技"}, {"code": "WDC", "name": "Western Digital"},
         {"code": "STX", "name": "Seagate"}, {"code": "AVGO", "name": "博通"},
         {"code": "AMD", "name": "超微"}, {"code": "INTC", "name": "英特爾"},
         {"code": "QCOM", "name": "高通"}, {"code": "RMBS", "name": "Rambus"},
@@ -72,24 +76,9 @@ class Config:
     }
 
 
-class SimpleRateLimiter:
-    def __init__(self, delay=0.1):
-        self.delay = delay
-        self.last_req = 0.0
-        self.lock = threading.Lock()
-
-    def wait(self):
-        with self.lock:
-            now = time.time()
-            if now - self.last_req < self.delay:
-                time.sleep(self.delay - (now - self.last_req))
-            self.last_req = time.time()
-
-
 class SessionManager:
     _instance = None
     _lock = threading.Lock()
-    rate_limiter = SimpleRateLimiter(delay=0.1)
 
     def __new__(cls):
         if cls._instance is None:
@@ -103,26 +92,14 @@ class SessionManager:
     @staticmethod
     def _create_session():
         session = requests.Session()
-        retry = Retry(total=3, backoff_factor=0.8, status_forcelist=[403, 429, 500, 502, 503, 504])
+        retry = Retry(total=4, backoff_factor=0.6, status_forcelist=[429, 500, 502, 503, 504])
         adapter = HTTPAdapter(max_retries=retry, pool_maxsize=Config.MAX_WORKERS * 2)
         session.mount("http://", adapter)
         session.mount("https://", adapter)
         return session
 
-    def get(self, url, **kwargs):
-        self.rate_limiter.wait()
-        headers = kwargs.pop("headers", {})
-        headers.update({
-            "User-Agent": random.choice([
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15"
-            ]),
-            "Accept": "application/json"
-        })
-        return self.session.get(url, headers=headers, **kwargs)
-
-    def post(self, url, **kwargs):
-        return self.session.post(url, **kwargs)
+    def get(self, *args, **kwargs): return self.session.get(*args, **kwargs)
+    def post(self, *args, **kwargs): return self.session.post(*args, **kwargs)
 
 
 SESSION = SessionManager()
@@ -130,57 +107,84 @@ SESSION = SessionManager()
 
 class TaskRepeater:
     @staticmethod
-    def fetch_data(ticker):
+    def fetch_data(ticker: str, period: str = "2y") -> pd.DataFrame:
         url = f"https://query2.finance.yahoo.com/v8/finance/chart/{ticker}"
-        resp = SESSION.get(url, params={"interval": "1d", "range": "1y"}, timeout=Config.API_TIMEOUT)
+        params = {"interval": "1d", "range": period}
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+
+        resp = SESSION.get(url, params=params, headers=headers, timeout=Config.API_TIMEOUT)
         resp.raise_for_status()
+        payload = resp.json().get("chart", {})
 
-        result = resp.json().get("chart", {}).get("result", [])
-        if not result or result[0].get("error"):
-            raise ValueError("API 回傳異常")
+        if payload.get("error"):
+            raise ValueError(f"Yahoo API Error for {ticker}")
 
-        quote = result[0]["indicators"]["quote"][0]
+        result = payload.get("result", [{}])[0]
+        quote = result.get("indicators", {}).get("quote", [{}])[0]
+
         df = pd.DataFrame({
-            "close": quote.get("close", []),
-            "high": quote.get("high", []),
-            "low": quote.get("low", [])
+            col: quote.get(col, []) for col in ["close", "high", "low", "open", "volume"]
         }).dropna()
 
-        if len(df) < 180:
-            raise ValueError("歷史資料不足")
-
-        return df.reset_index(drop=True)
+        if df.empty:
+            raise ValueError(f"No valid data for {ticker}")
+        return df
 
     @staticmethod
-    def fetch_vix():
+    def fetch_benchmark() -> Optional[pd.DataFrame]:
+        """抓取 QQQ 用於計算真正 RS Rating"""
         try:
-            resp = SESSION.get(
-                "https://query2.finance.yahoo.com/v8/finance/chart/^VIX",
-                params={"interval": "1d", "range": "1d"},
-                timeout=Config.API_TIMEOUT
-            )
-            return round(float(resp.json()["chart"]["result"][0]["meta"]["regularMarketPrice"]), 2)
+            return TaskRepeater.fetch_data("QQQ", period="1y")
+        except Exception as e:
+            logger.warning(f"無法獲取 QQQ 數據: {e}")
+            return None
+
+    @staticmethod
+    def calculate_macd(closes: pd.Series) -> Dict[str, Any]:
+        if len(closes) < 35:
+            return {"status": "數據不足", "signal_strength": 0}
+
+        ema_fast = closes.ewm(span=12, adjust=False).mean()
+        ema_slow = closes.ewm(span=26, adjust=False).mean()
+        macd_line = ema_fast - ema_slow
+        signal_line = macd_line.ewm(span=9, adjust=False).mean()
+        histogram = macd_line - signal_line
+
+        golden_cross = False
+        death_cross = False
+        for i in range(max(1, len(macd_line) - 5), len(macd_line)):
+            if macd_line.iloc[i-1] < signal_line.iloc[i-1] and macd_line.iloc[i] >= signal_line.iloc[i]:
+                golden_cross = True
+            if macd_line.iloc[i-1] > signal_line.iloc[i-1] and macd_line.iloc[i] <= signal_line.iloc[i]:
+                death_cross = True
+
+        if golden_cross:
+            return {"status": "金叉 📈", "signal_strength": 2}
+        elif death_cross:
+            return {"status": "死叉 📉", "signal_strength": -2}
+        elif histogram.iloc[-1] > 0:
+            return {"status": "多頭動能", "signal_strength": 1}
+        elif histogram.iloc[-1] < 0:
+            return {"status": "空頭動能", "signal_strength": -1}
+        else:
+            return {"status": "中性", "signal_strength": 0}
+
+    @staticmethod
+    def calculate_rs_rating(stock_df: pd.DataFrame, benchmark_df: Optional[pd.DataFrame]) -> int:
+        if benchmark_df is None or len(stock_df) < 200 or len(benchmark_df) < 200:
+            return 50
+
+        try:
+            stock_return = (stock_df["close"].iloc[-1] / stock_df["close"].iloc[0] - 1) * 100
+            bench_return = (benchmark_df["close"].iloc[-1] / benchmark_df["close"].iloc[0] - 1) * 100
+            relative = stock_return - bench_return
+            rs_score = 50 + relative * 1.8
+            return int(max(1, min(99, round(rs_score))))
         except Exception:
-            logger.warning("VIX 獲取失敗，使用預設值 20.0")
-            return 20.0
-
-
-class TechnicalEngine:
-    @staticmethod
-    def calculate_rsi(closes, period=14):
-        delta = closes.diff()
-        up = delta.clip(lower=0).ewm(alpha=1/period, adjust=False).mean()
-        down = (-delta.clip(upper=0)).ewm(alpha=1/period, adjust=False).mean()
-
-        last_down = down.iloc[-1]
-        if last_down == 0:
-            return 100.0 if up.iloc[-1] > 0 else 50.0
-
-        rs = up.iloc[-1] / last_down
-        return float(100.0 - (100.0 / (1.0 + rs)))
+            return 50
 
     @staticmethod
-    def evaluate_stock(df, price, vix):
+    def calculate_indicators(df: pd.DataFrame, benchmark_df: Optional[pd.DataFrame]) -> Dict[str, Any]:
         closes = df["close"]
         current = float(closes.iloc[-1])
 
@@ -191,174 +195,213 @@ class TechnicalEngine:
         trend_sig = 3 if sma20 > sma50 > sma200 else -3 if sma20 < sma50 < sma200 else 0
         align = "多頭排列" if trend_sig == 3 else "空頭排列" if trend_sig == -3 else "震盪整理"
 
-        rsi = TechnicalEngine.calculate_rsi(closes)
-        rsi_sig = 3 if rsi <= 30 else -3 if rsi >= 70 else 0
-        rsi_state = "超賣" if rsi_sig == 3 else "超買" if rsi_sig == -3 else "中立"
+        # RSI
+        alpha = 1.0 / 14
+        deltas = closes.diff()
+        avg_up = deltas.clip(lower=0).fillna(0).ewm(alpha=alpha, adjust=False).mean().iloc[-1]
+        avg_down = (-deltas.clip(upper=0)).fillna(0).ewm(alpha=alpha, adjust=False).mean().iloc[-1]
 
-        high_20 = df["high"].rolling(20).max().iloc[-1]
-        low_20 = df["low"].rolling(20).min().iloc[-1]
-        atr_pct = (high_20 - low_20) / current if current > 0 else 0.03
+        if avg_down == 0:
+            rsi_val = 100 if avg_up > 0 else 50
+        elif avg_up == 0:
+            rsi_val = 0
+        else:
+            rsi_val = 100 - (100 / (1 + avg_up / avg_down))
 
-        # 簡單 RS Rating 近似計算（參考 QQQ 相對強度）
-        # 真實 IBD RS Rating 需要付費數據，這裡用分數 + 趨勢近似
-        rs_rating = min(99, max(1, int(50 + trend_sig * 8 + (rsi - 50) * 0.4)))
-        rs_label = "頂級強勢" if rs_rating >= 90 else "強勢" if rs_rating >= 80 else "中性" if rs_rating >= 60 else "偏弱"
+        rsi_sig = 3 if rsi_val <= 30 else -3 if rsi_val >= 70 else 0
 
-        indicators = {
+        high_max = df["high"].rolling(20).max().iloc[-1]
+        low_min = df["low"].rolling(20).min().iloc[-1]
+        atr_pct = (high_max - low_min) / current if current > 0 else 0.03
+
+        macd_data = TaskRepeater.calculate_macd(closes)
+        rs_rating = TaskRepeater.calculate_rs_rating(df, benchmark_df)
+
+        return {
             "trend": {"alignment": align, "signal": trend_sig},
-            "rsi": {"rsi": round(rsi, 1), "state": rsi_state},
-            "rs_rating": {"value": rs_rating, "label": rs_label}
+            "rsi": {"rsi": round(rsi_val, 1), "signal": rsi_sig},
+            "macd": macd_data,
+            "rs_rating": rs_rating,
+            "atr_pct": round(atr_pct, 4)
         }
 
-        score = max(0, min(100, 50 + trend_sig * 10 + rsi_sig * 5))
-        rules = [(75, "STRONG_BUY", "🚀🚀🚀"), (60, "BUY", "🚀🚀"), (50, "WEAK_BUY", "🚀"),
-                 (45, "NEUTRAL", "➡️"), (30, "WEAK_SELL", "🔻"), (15, "SELL", "🔻🔻")]
-        rec, emoji = next(((r, e) for t, r, e in rules if score >= t), ("STRONG_SELL", "🔻🔻🔻"))
-        composite = {"score": round(score, 1), "recommendation": rec, "emoji": emoji}
 
-        is_short = rec in {"WEAK_SELL", "SELL", "STRONG_SELL"}
-        entry = price * (1.02 if is_short else 0.98)
-        stop_loss = entry * (1.05 if is_short else 0.95)
-        take_profit = entry * (0.92 if is_short else 1.08)
+class DecisionBoard:
+    @staticmethod
+    def evaluate_score(indicators: Dict[str, Any]) -> Dict[str, Any]:
+        trend_sig = indicators["trend"]["signal"]
+        rsi_sig = indicators["rsi"]["signal"]
+        macd_strength = indicators["macd"]["signal_strength"]
+        rs_rating = indicators.get("rs_rating", 50)
+
+        score = 50 + (trend_sig * 8) + (rsi_sig * 6) + (macd_strength * 7)
+
+        if rs_rating >= 90: score += 18
+        elif rs_rating >= 80: score += 12
+        elif rs_rating >= 70: score += 6
+
+        score = max(0, min(100, round(score, 1)))
+
+        if score >= 80: rec = "STRONG_BUY"
+        elif score >= 65: rec = "BUY"
+        elif score >= 45: rec = "NEUTRAL"
+        else: rec = "SELL"
+
+        return {"score": score, "recommendation": rec}
+
+    @staticmethod
+    def calculate_risk(price: float, score: float, rec: str, atr_pct: float, vix: float) -> Dict[str, Any]:
+        is_short = rec == "SELL"
+
+        if not is_short:
+            entry = price * 0.98
+            stop_loss = entry * 0.95
+            take_profit = entry * 1.08
+        else:
+            entry = price * 1.02
+            stop_loss = entry * 1.05
+            take_profit = entry * 0.92
 
         win_rate = max(0.35, min(0.75, score / 100))
-        risk_amt = max(abs(entry - stop_loss), entry * 0.005)
-        rr = abs(take_profit - entry) / risk_amt
-        kelly = max(0, min(0.30, ((win_rate * rr) - (1 - win_rate)) / rr * Config.KELLY_BASE)) if rr > 0 else 0
+        actual_rr = abs(take_profit - entry) / abs(entry - stop_loss) if stop_loss != entry else 2.0
+
+        kelly = (win_rate * actual_rr - (1 - win_rate)) / actual_rr * 0.3 if actual_rr > 0 else 0
 
         vol_factor = max(0.4, min(1.2, 0.04 / atr_pct)) if atr_pct > 0 else 1.0
         vix_factor = 0.5 if vix > 30 else 0.7 if vix > 25 else 0.9 if vix > 20 else 1.0
-        final_kelly = round(kelly * vol_factor * vix_factor * 100, 1)
 
-        risk = {
+        kelly = max(0.0, min(0.30, kelly * vol_factor * vix_factor))
+
+        return {
             "entry": round(entry, 2),
             "stop_loss": round(stop_loss, 2),
             "take_profit": round(take_profit, 2),
-            "kelly_pct": final_kelly,
+            "kelly_pct": round(kelly * 100, 1),
             "is_short": is_short,
-            "vix_factor": round(vix_factor, 2),
             "risk_note": f"VIX乘數:{vix_factor:.1f}"
         }
-
-        return indicators, composite, risk
 
 
 class WorkflowMapper:
     @staticmethod
-    def _process_single_stock(stock, vix):
+    def _process_single_stock(stock: Dict[str, str], vix: float, benchmark_df: Optional[pd.DataFrame]) -> Optional[Dict[str, Any]]:
         try:
             df = TaskRepeater.fetch_data(stock["code"])
             price = float(df["close"].iloc[-1])
-            indicators, composite, risk = TechnicalEngine.evaluate_stock(df, price, vix)
-            logger.info(f"✅ {stock['code']:<5} | 評分: {composite['score']:5.1f} {composite['emoji']}")
+            indicators = TaskRepeater.calculate_indicators(df, benchmark_df)
+            composite = DecisionBoard.evaluate_score(indicators)
+            risk = DecisionBoard.calculate_risk(price, composite["score"], composite["recommendation"], indicators["atr_pct"], vix)
             return {**stock, "price": price, "indicators": indicators, "composite": composite, "risk": risk}
         except Exception as e:
-            logger.warning(f"⚠️ {stock['code']} 失敗: {str(e)[:50]}")
+            logger.error(f"❌ 處理 {stock['code']} 失敗: {str(e)[:80]}")
             return None
 
     @staticmethod
-    def trigger_run():
-        vix = TaskRepeater.fetch_vix()
+    def trigger_run() -> Tuple[List[Dict], float]:
+        try:
+            vix_df = TaskRepeater.fetch_data("^VIX", period="6mo")
+            vix = round(float(vix_df["close"].iloc[-1]), 2)
+        except:
+            vix = 20.0
+
+        benchmark_df = TaskRepeater.fetch_benchmark()
+
+        logger.info(f"🚀 開始並行分析（共 {len(Config.STOCKS)} 檔）| VIX: {vix}")
+
         results = []
-
-        logger.info(f"🚀 開始分析（VIX: {vix}）")
-
         with concurrent.futures.ThreadPoolExecutor(max_workers=Config.MAX_WORKERS) as executor:
-            futures = [executor.submit(WorkflowMapper._process_single_stock, stock, vix) for stock in Config.STOCKS]
-            for future in concurrent.futures.as_completed(futures):
-                if res := future.result():
-                    results.append(res)
+            future_to_stock = {
+                executor.submit(WorkflowMapper._process_single_stock, stock, vix, benchmark_df): stock
+                for stock in Config.STOCKS
+            }
+            for future in concurrent.futures.as_completed(future_to_stock):
+                result = future.result()
+                if result:
+                    results.append(result)
 
+        logger.info(f"✅ 完成 {len(results)}/{len(Config.STOCKS)} 檔")
         return results, vix
 
 
 class RunnerHome:
     @staticmethod
-    def runner_cowork_discord(results, vix):
+    def runner_cowork_discord(results: List[Dict], vix: float):
         if not Config.DISCORD_WEBHOOK:
             return
 
-        top = sorted([r for r in results if r["composite"]["score"] >= Config.NOTIFY_SCORE_THRESHOLD],
-                     key=lambda x: x["composite"]["score"], reverse=True)[:5]
+        high_score = sorted(
+            [r for r in results if r["composite"]["score"] >= Config.NOTIFY_THRESHOLD],
+            key=lambda x: x["composite"]["score"],
+            reverse=True
+        )
 
-        if not top:
-            logger.info("今日無達標推薦。")
+        if not high_score:
+            logger.info(f"沒有達到通知門檻 (≥{Config.NOTIFY_THRESHOLD}) 的股票。")
             return
 
         embeds = []
-        for r in top:
-            comp, risk, ind = r["composite"], r["risk"], r["indicators"]
-            is_short = risk["is_short"]
+        for r in high_score[:5]:
+            comp = r["composite"]
+            risk = r["risk"]
+            ind = r.get("indicators", {})
+            is_short = risk.get("is_short", False)
 
-            direction = "空頭（Short）" if is_short else "多頭（Long）"
+            direction = "🔻 空頭（Short）" if is_short else "🔺 多頭（Long）"
             direction_emoji = "🔻" if is_short else "▲"
-            signal_text = "強烈沽空" if is_short else "強烈買入"
+            rec_cn = "強烈買入" if comp["recommendation"] == "STRONG_BUY" else "買入" if comp["recommendation"] == "BUY" else "中性"
 
-            tech = f"• 趨勢：{ind['trend']['alignment']}\n• RSI：{ind['rsi']['rsi']}（{ind['rsi']['state']}）\n• RS Rating：{ind['rs_rating']['value']}（{ind['rs_rating']['label']}）"
+            macd_status = ind.get("macd", {}).get("status", "")
+            macd_line = f"• MACD : {macd_status}\n" if ("金叉" in macd_status or "死叉" in macd_status) else ""
+
+            tech = (
+                f"• 趨勢 : {ind.get('trend', {}).get('alignment', '震盪整理')}\n"
+                f"• RSI : {ind.get('rsi', {}).get('rsi', 50)}（{ind.get('rsi', {}).get('state', '中立')}）\n"
+                f"{macd_line}"
+                f"• RS Rating : {ind.get('rs_rating', 50)}"
+            )
 
             domain = Config.LOGO_MAP.get(r["code"])
-            logo = f"https://logo.clearbit.com/{domain}" if domain else None
+            logo_url = f"https://logo.clearbit.com/{domain}" if domain else None
 
-            desc = f"""**評分：** **{comp['score']}**  
-**方向：** {direction_emoji} {direction}  
-**訊號：** {comp['emoji']}（{signal_text}）
-
-**【技術面 摘要】**
-{tech}
-
-**【風險控制】**
-• 現價：${r['price']:,.2f}
-• 入場：${risk['entry']:,.2f}
-• 止盈：${risk['take_profit']:,.2f}
-• 止損：${risk['stop_loss']:,.2f}
-
-**建議倉位：** {risk['kelly_pct']:.1f}%  
-**市場恐慌（VIX）：** {vix}"""
+            desc = (
+                f"評分 : {comp['score']}\n"
+                f"方向 : {direction_emoji} {direction}\n"
+                f"訊號 : {comp['emoji']} ({rec_cn})\n\n"
+                f"【技術面 摘要】\n{tech}\n\n"
+                f"【風險控制】\n"
+                f"• 現價 : ${r['price']:.2f}\n"
+                f"• 入場 : ${risk['entry']:.2f}\n"
+                f"• 止盈 : ${risk['take_profit']:.2f}\n"
+                f"• 止損 : ${risk['stop_loss']:.2f}\n\n"
+                f"建議倉位 : {risk['kelly_pct']:.1f}%\n"
+                f"市場恐慌 (VIX) : {vix}"
+            )
 
             embed = {
                 "title": f"✅ {r['name']} ({r['code']})",
                 "description": desc,
-                "color": 0xFF0000 if is_short else 0x00FF41
+                "color": 0xFF1744 if is_short else 0x00C853,
+                "footer": {"text": f"VIX: {vix} | RS Rating 參考 QQQ"}
             }
-            if logo:
-                embed["thumbnail"] = {"url": logo}
+            if logo_url:
+                embed["thumbnail"] = {"url": logo_url}
 
             embeds.append(embed)
 
         try:
-            SESSION.post(Config.DISCORD_WEBHOOK, json={"embeds": embeds}, timeout=15)
-            logger.info(f"✅ Discord 推播成功（{len(embeds)} 檔）")
+            SESSION.post(Config.DISCORD_WEBHOOK, json={"embeds": embeds}, timeout=12)
+            logger.info(f"✓ Discord 推播成功（{len(embeds)} 檔）")
         except Exception as e:
-            logger.error(f"Discord 推播失敗: {e}")
-
-    @staticmethod
-    def print_local_results(results, vix):
-        logger.info("\n" + "="*70)
-        logger.info(f"📊 本地分析結果（VIX: {vix}）")
-        logger.info("="*70)
-        for i, r in enumerate(sorted(results, key=lambda x: x["composite"]["score"], reverse=True)[:8], 1):
-            logger.info(
-                f"{i}. {r['code']:<5} | 價: ${r['price']:<8.2f} | "
-                f"評分: {r['composite']['score']:5.1f} {r['composite']['emoji']} | "
-                f"RS Rating: {r['indicators']['rs_rating']['value']} | "
-                f"Kelly: {r['risk']['kelly_pct']:5.1f}%"
-            )
-        logger.info("="*70 + "\n")
+            logger.error(f"Discord 推送失敗: {e}")
 
 
 def main():
-    logger.info("🤖 智能搜尋引擎啟動...")
-    start = time.time()
-
-    try:
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        logger.info("🤖 智能搜尋引擎 v7.1 啟動")
         results, vix = WorkflowMapper.trigger_run()
-        if results:
-            RunnerHome.print_local_results(results, vix)
-            if Config.DISCORD_WEBHOOK:
-                RunnerHome.runner_cowork_discord(results, vix)
-        logger.info(f"🏁 執行完成，耗時 {time.time() - start:.1f}s")
-    except Exception as e:
-        logger.error(f"執行錯誤: {e}", exc_info=True)
+        RunnerHome.runner_cowork_discord(results, vix)
+    else:
+        logger.warning("請使用 GitHub Actions 運行")
 
 
 if __name__ == "__main__":
