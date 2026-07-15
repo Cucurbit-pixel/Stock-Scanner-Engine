@@ -83,3 +83,6 @@ else:
                 st.write(f"入場：${stock['risk']['entry']:.2f}")
                 st.write(f"止盈：${stock['risk']['take_profit']:.2f}")
                 st.write(f"止損：${stock['risk']['stop_loss']:.2f}")
+                # ===================== 加返 RS Rating =====================
+                rs_rating = stock['indicators'].get('rs_rating', 'N/A')
+                st.write(f"RS Rating（相對 QQQ）：{rs_rating}")
