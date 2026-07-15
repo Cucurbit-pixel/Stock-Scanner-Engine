@@ -1,25 +1,18 @@
 #!/usr/bin/env python3
 """
-智能搜尋引擎 v7.1（最終整合版）
-- 真正 MACD（金叉/死叉偵測）
-- 真正 RS Rating（相對 QQQ 12個月相對強度）
-- Discord 顯示格式乾淨無方框
+智能搜尋引擎 v7.2（已修復 KeyError: 'emoji'）
 """
 
 import os
 import sys
-import time
-import random
 import logging
 import threading
 import warnings
 import concurrent.futures
-from datetime import datetime, timezone
 from typing import Any, Dict, List, Tuple, Optional
 
 import requests
 import pandas as pd
-import numpy as np
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
@@ -110,7 +103,7 @@ class TaskRepeater:
     def fetch_data(ticker: str, period: str = "2y") -> pd.DataFrame:
         url = f"https://query2.finance.yahoo.com/v8/finance/chart/{ticker}"
         params = {"interval": "1d", "range": period}
-        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+        headers = {"User-Agent": "Mozilla/5.0"}
 
         resp = SESSION.get(url, params=params, headers=headers, timeout=Config.API_TIMEOUT)
         resp.raise_for_status()
@@ -132,7 +125,6 @@ class TaskRepeater:
 
     @staticmethod
     def fetch_benchmark() -> Optional[pd.DataFrame]:
-        """抓取 QQQ 用於計算真正 RS Rating"""
         try:
             return TaskRepeater.fetch_data("QQQ", period="1y")
         except Exception as e:
@@ -150,13 +142,14 @@ class TaskRepeater:
         signal_line = macd_line.ewm(span=9, adjust=False).mean()
         histogram = macd_line - signal_line
 
-        golden_cross = False
-        death_cross = False
-        for i in range(max(1, len(macd_line) - 5), len(macd_line)):
-            if macd_line.iloc[i-1] < signal_line.iloc[i-1] and macd_line.iloc[i] >= signal_line.iloc[i]:
-                golden_cross = True
-            if macd_line.iloc[i-1] > signal_line.iloc[i-1] and macd_line.iloc[i] <= signal_line.iloc[i]:
-                death_cross = True
+        golden_cross = any(
+            macd_line.iloc[i-1] < signal_line.iloc[i-1] and macd_line.iloc[i] >= signal_line.iloc[i]
+            for i in range(max(1, len(macd_line) - 5), len(macd_line))
+        )
+        death_cross = any(
+            macd_line.iloc[i-1] > signal_line.iloc[i-1] and macd_line.iloc[i] <= signal_line.iloc[i]
+            for i in range(max(1, len(macd_line) - 5), len(macd_line))
+        )
 
         if golden_cross:
             return {"status": "金叉 📈", "signal_strength": 2}
@@ -173,13 +166,11 @@ class TaskRepeater:
     def calculate_rs_rating(stock_df: pd.DataFrame, benchmark_df: Optional[pd.DataFrame]) -> int:
         if benchmark_df is None or len(stock_df) < 200 or len(benchmark_df) < 200:
             return 50
-
         try:
             stock_return = (stock_df["close"].iloc[-1] / stock_df["close"].iloc[0] - 1) * 100
             bench_return = (benchmark_df["close"].iloc[-1] / benchmark_df["close"].iloc[0] - 1) * 100
             relative = stock_return - bench_return
-            rs_score = 50 + relative * 1.8
-            return int(max(1, min(99, round(rs_score))))
+            return int(max(1, min(99, round(50 + relative * 1.8))))
         except Exception:
             return 50
 
@@ -195,7 +186,6 @@ class TaskRepeater:
         trend_sig = 3 if sma20 > sma50 > sma200 else -3 if sma20 < sma50 < sma200 else 0
         align = "多頭排列" if trend_sig == 3 else "空頭排列" if trend_sig == -3 else "震盪整理"
 
-        # RSI
         alpha = 1.0 / 14
         deltas = closes.diff()
         avg_up = deltas.clip(lower=0).fillna(0).ewm(alpha=alpha, adjust=False).mean().iloc[-1]
@@ -242,12 +232,16 @@ class DecisionBoard:
 
         score = max(0, min(100, round(score, 1)))
 
-        if score >= 80: rec = "STRONG_BUY"
-        elif score >= 65: rec = "BUY"
-        elif score >= 45: rec = "NEUTRAL"
-        else: rec = "SELL"
+        if score >= 80:
+            rec, emoji = "STRONG_BUY", "🚀🚀🚀"
+        elif score >= 65:
+            rec, emoji = "BUY", "🚀🚀"
+        elif score >= 45:
+            rec, emoji = "NEUTRAL", "➡️"
+        else:
+            rec, emoji = "SELL", "🔻🔻"
 
-        return {"score": score, "recommendation": rec}
+        return {"score": score, "recommendation": rec, "emoji": emoji}
 
     @staticmethod
     def calculate_risk(price: float, score: float, rec: str, atr_pct: float, vix: float) -> Dict[str, Any]:
@@ -397,7 +391,7 @@ class RunnerHome:
 
 def main():
     if os.environ.get("GITHUB_ACTIONS") == "true":
-        logger.info("🤖 智能搜尋引擎 v7.1 啟動")
+        logger.info("🤖 智能搜尋引擎 v7.2 啟動")
         results, vix = WorkflowMapper.trigger_run()
         RunnerHome.runner_cowork_discord(results, vix)
     else:
