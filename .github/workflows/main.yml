@@ -2,9 +2,8 @@ name: Daily Stock Scan
 
 on:
   schedule:
-    # 香港時間每天晚上 10:00 左右運行（可自行調整）
-    - cron: '0 14 * * *'   # UTC 時間 14:00 = 香港時間 22:00
-  workflow_dispatch:       # 允許手動觸發測試
+    - cron: '0 14 * * *'   # 香港時間每天晚上 10:00 左右
+  workflow_dispatch:
 
 jobs:
   scan:
@@ -26,3 +25,11 @@ jobs:
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: python scanner.py
+
+      - name: Commit and push latest_scan.json
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add latest_scan.json
+          git commit -m "Update latest_scan.json [skip ci]" || echo "No changes"
+          git push
