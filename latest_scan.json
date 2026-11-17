@@ -1,20 +1,54 @@
 {
-  "scan_time": "2026-11-16 23:05:28",
-  "vix": 22.91,
+  "scan_time": "2026-11-17 21:56:49",
+  "vix": 25.46,
   "total_stocks": 38,
   "triggered_count": 5,
   "results": [
     {
-      "code": "AVGO",
-      "name": "博通",
-      "price": 333.3999938964844,
+      "code": "WDC",
+      "name": "Western Digital",
+      "price": 283.3299865722656,
       "indicators": {
         "trend": {
           "alignment": "空頭排列",
           "signal": -3
         },
         "rsi": {
-          "rsi": 48.8,
+          "rsi": 36.8,
+          "signal": 0
+        },
+        "macd": {
+          "status": "空頭動能",
+          "signal_strength": -1
+        },
+        "rs_rating": 99,
+        "atr_pct": 0.5069
+      },
+      "composite": {
+        "score": 37,
+        "recommendation": "SELL",
+        "emoji": "🔻🔻"
+      },
+      "risk": {
+        "entry": 289.0,
+        "stop_loss": 303.45,
+        "take_profit": 265.88,
+        "kelly_pct": 0.0,
+        "is_short": true,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "AMD",
+      "name": "超微",
+      "price": 503.4100036621094,
+      "indicators": {
+        "trend": {
+          "alignment": "震盪整理",
+          "signal": 0
+        },
+        "rsi": {
+          "rsi": 46.6,
           "signal": 0
         },
         "macd": {
@@ -22,7 +56,41 @@
           "signal_strength": 2
         },
         "rs_rating": 99,
-        "atr_pct": 0.2401
+        "atr_pct": 0.3812
+      },
+      "composite": {
+        "score": 82,
+        "recommendation": "STRONG_BUY",
+        "emoji": "🚀🚀🚀"
+      },
+      "risk": {
+        "entry": 493.34,
+        "stop_loss": 468.67,
+        "take_profit": 532.81,
+        "kelly_pct": 5.0,
+        "is_short": false,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "RMBS",
+      "name": "Rambus",
+      "price": 78.72000122070312,
+      "indicators": {
+        "trend": {
+          "alignment": "空頭排列",
+          "signal": -3
+        },
+        "rsi": {
+          "rsi": 41.5,
+          "signal": 0
+        },
+        "macd": {
+          "status": "金叉 📈",
+          "signal_strength": 2
+        },
+        "rs_rating": 99,
+        "atr_pct": 0.3406
       },
       "composite": {
         "score": 58,
@@ -30,18 +98,324 @@
         "emoji": "➡️"
       },
       "risk": {
-        "entry": 326.73,
-        "stop_loss": 310.4,
-        "take_profit": 352.87,
-        "kelly_pct": 3.4,
+        "entry": 77.15,
+        "stop_loss": 73.29,
+        "take_profit": 83.32,
+        "kelly_pct": 2.7,
         "is_short": false,
-        "risk_note": "VIX乘數:0.9"
+        "risk_note": "VIX乘數:0.7"
       }
     },
     {
-      "code": "RMBS",
-      "name": "Rambus",
-      "price": 77.94000244140625,
+      "code": "AMAT",
+      "name": "Applied Materials",
+      "price": 349.2300109863281,
+      "indicators": {
+        "trend": {
+          "alignment": "空頭排列",
+          "signal": -3
+        },
+        "rsi": {
+          "rsi": 38.6,
+          "signal": 0
+        },
+        "macd": {
+          "status": "金叉 📈",
+          "signal_strength": 2
+        },
+        "rs_rating": 99,
+        "atr_pct": 0.3137
+      },
+      "composite": {
+        "score": 58,
+        "recommendation": "NEUTRAL",
+        "emoji": "➡️"
+      },
+      "risk": {
+        "entry": 342.25,
+        "stop_loss": 325.13,
+        "take_profit": 369.63,
+        "kelly_pct": 2.7,
+        "is_short": false,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "STX",
+      "name": "Seagate",
+      "price": 504.3999938964844,
+      "indicators": {
+        "trend": {
+          "alignment": "震盪整理",
+          "signal": 0
+        },
+        "rsi": {
+          "rsi": 35.3,
+          "signal": 0
+        },
+        "macd": {
+          "status": "金叉 📈",
+          "signal_strength": 2
+        },
+        "rs_rating": 99,
+        "atr_pct": 0.534
+      },
+      "composite": {
+        "score": 82,
+        "recommendation": "STRONG_BUY",
+        "emoji": "🚀🚀🚀"
+      },
+      "risk": {
+        "entry": 494.31,
+        "stop_loss": 469.6,
+        "take_profit": 533.86,
+        "kelly_pct": 5.0,
+        "is_short": false,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "MU",
+      "name": "美光科技",
+      "price": 712.4199829101562,
+      "indicators": {
+        "trend": {
+          "alignment": "震盪整理",
+          "signal": 0
+        },
+        "rsi": {
+          "rsi": 37.5,
+          "signal": 0
+        },
+        "macd": {
+          "status": "空頭動能",
+          "signal_strength": -1
+        },
+        "rs_rating": 99,
+        "atr_pct": 0.4772
+      },
+      "composite": {
+        "score": 61,
+        "recommendation": "NEUTRAL",
+        "emoji": "➡️"
+      },
+      "risk": {
+        "entry": 698.17,
+        "stop_loss": 663.26,
+        "take_profit": 754.03,
+        "kelly_pct": 3.1,
+        "is_short": false,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "QCOM",
+      "name": "高通",
+      "price": 166.6699981689453,
+      "indicators": {
+        "trend": {
+          "alignment": "震盪整理",
+          "signal": 0
+        },
+        "rsi": {
+          "rsi": 44.7,
+          "signal": 0
+        },
+        "macd": {
+          "status": "金叉 📈",
+          "signal_strength": 2
+        },
+        "rs_rating": 34,
+        "atr_pct": 0.224
+      },
+      "composite": {
+        "score": 64,
+        "recommendation": "NEUTRAL",
+        "emoji": "➡️"
+      },
+      "risk": {
+        "entry": 163.34,
+        "stop_loss": 155.17,
+        "take_profit": 176.4,
+        "kelly_pct": 3.5,
+        "is_short": false,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "AVGO",
+      "name": "博通",
+      "price": 341.6000061035156,
+      "indicators": {
+        "trend": {
+          "alignment": "空頭排列",
+          "signal": -3
+        },
+        "rsi": {
+          "rsi": 51.4,
+          "signal": 0
+        },
+        "macd": {
+          "status": "金叉 📈",
+          "signal_strength": 2
+        },
+        "rs_rating": 99,
+        "atr_pct": 0.2343
+      },
+      "composite": {
+        "score": 58,
+        "recommendation": "NEUTRAL",
+        "emoji": "➡️"
+      },
+      "risk": {
+        "entry": 334.77,
+        "stop_loss": 318.03,
+        "take_profit": 361.55,
+        "kelly_pct": 2.7,
+        "is_short": false,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "KLAC",
+      "name": "KLA",
+      "price": 144.55999755859375,
+      "indicators": {
+        "trend": {
+          "alignment": "空頭排列",
+          "signal": -3
+        },
+        "rsi": {
+          "rsi": 41.1,
+          "signal": 0
+        },
+        "macd": {
+          "status": "金叉 📈",
+          "signal_strength": 2
+        },
+        "rs_rating": 99,
+        "atr_pct": 0.2984
+      },
+      "composite": {
+        "score": 58,
+        "recommendation": "NEUTRAL",
+        "emoji": "➡️"
+      },
+      "risk": {
+        "entry": 141.67,
+        "stop_loss": 134.59,
+        "take_profit": 153.0,
+        "kelly_pct": 2.7,
+        "is_short": false,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "LRCX",
+      "name": "Lam Research",
+      "price": 210.69000244140625,
+      "indicators": {
+        "trend": {
+          "alignment": "空頭排列",
+          "signal": -3
+        },
+        "rsi": {
+          "rsi": 37.6,
+          "signal": 0
+        },
+        "macd": {
+          "status": "金叉 📈",
+          "signal_strength": 2
+        },
+        "rs_rating": 99,
+        "atr_pct": 0.4113
+      },
+      "composite": {
+        "score": 58,
+        "recommendation": "NEUTRAL",
+        "emoji": "➡️"
+      },
+      "risk": {
+        "entry": 206.48,
+        "stop_loss": 196.15,
+        "take_profit": 222.99,
+        "kelly_pct": 2.7,
+        "is_short": false,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "INTC",
+      "name": "英特爾",
+      "price": 55.16999816894531,
+      "indicators": {
+        "trend": {
+          "alignment": "震盪整理",
+          "signal": 0
+        },
+        "rsi": {
+          "rsi": 29.7,
+          "signal": 3
+        },
+        "macd": {
+          "status": "空頭動能",
+          "signal_strength": -1
+        },
+        "rs_rating": 99,
+        "atr_pct": 0.8006
+      },
+      "composite": {
+        "score": 79,
+        "recommendation": "BUY",
+        "emoji": "🚀🚀"
+      },
+      "risk": {
+        "entry": 54.07,
+        "stop_loss": 51.36,
+        "take_profit": 58.39,
+        "kelly_pct": 5.0,
+        "is_short": false,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "TER",
+      "name": "Teradyne",
+      "price": 234.17999267578125,
+      "indicators": {
+        "trend": {
+          "alignment": "空頭排列",
+          "signal": -3
+        },
+        "rsi": {
+          "rsi": 34.7,
+          "signal": 0
+        },
+        "macd": {
+          "status": "金叉 📈",
+          "signal_strength": 2
+        },
+        "rs_rating": 99,
+        "atr_pct": 0.5992
+      },
+      "composite": {
+        "score": 58,
+        "recommendation": "NEUTRAL",
+        "emoji": "➡️"
+      },
+      "risk": {
+        "entry": 229.5,
+        "stop_loss": 218.02,
+        "take_profit": 247.86,
+        "kelly_pct": 2.7,
+        "is_short": false,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "PLAB",
+      "name": "Photronics",
+      "price": 26.190000534057617,
       "indicators": {
         "trend": {
           "alignment": "空頭排列",
@@ -52,309 +426,37 @@
           "signal": 0
         },
         "macd": {
-          "status": "金叉 📈",
-          "signal_strength": 2
+          "status": "死叉 📉",
+          "signal_strength": -2
         },
-        "rs_rating": 99,
-        "atr_pct": 0.344
+        "rs_rating": 49,
+        "atr_pct": 0.1859
       },
       "composite": {
-        "score": 58,
-        "recommendation": "NEUTRAL",
-        "emoji": "➡️"
+        "score": 12,
+        "recommendation": "SELL",
+        "emoji": "🔻🔻"
       },
       "risk": {
-        "entry": 76.38,
-        "stop_loss": 72.56,
-        "take_profit": 82.49,
-        "kelly_pct": 3.4,
-        "is_short": false,
-        "risk_note": "VIX乘數:0.9"
+        "entry": 26.71,
+        "stop_loss": 28.05,
+        "take_profit": 24.58,
+        "kelly_pct": 0.0,
+        "is_short": true,
+        "risk_note": "VIX乘數:0.7"
       }
     },
     {
-      "code": "LRCX",
-      "name": "Lam Research",
-      "price": 210.8300018310547,
+      "code": "AAOI",
+      "name": "Applied Optoelectronics",
+      "price": 45.220001220703125,
       "indicators": {
         "trend": {
           "alignment": "空頭排列",
           "signal": -3
         },
         "rsi": {
-          "rsi": 37.7,
-          "signal": 0
-        },
-        "macd": {
-          "status": "金叉 📈",
-          "signal_strength": 2
-        },
-        "rs_rating": 99,
-        "atr_pct": 0.4114
-      },
-      "composite": {
-        "score": 58,
-        "recommendation": "NEUTRAL",
-        "emoji": "➡️"
-      },
-      "risk": {
-        "entry": 206.61,
-        "stop_loss": 196.28,
-        "take_profit": 223.14,
-        "kelly_pct": 3.4,
-        "is_short": false,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "AMD",
-      "name": "超微",
-      "price": 504.2799987792969,
-      "indicators": {
-        "trend": {
-          "alignment": "震盪整理",
-          "signal": 0
-        },
-        "rsi": {
-          "rsi": 46.7,
-          "signal": 0
-        },
-        "macd": {
-          "status": "金叉 📈",
-          "signal_strength": 2
-        },
-        "rs_rating": 99,
-        "atr_pct": 0.3805
-      },
-      "composite": {
-        "score": 82,
-        "recommendation": "STRONG_BUY",
-        "emoji": "🚀🚀🚀"
-      },
-      "risk": {
-        "entry": 494.19,
-        "stop_loss": 469.48,
-        "take_profit": 533.73,
-        "kelly_pct": 6.4,
-        "is_short": false,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "STX",
-      "name": "Seagate",
-      "price": 499.0,
-      "indicators": {
-        "trend": {
-          "alignment": "震盪整理",
-          "signal": 0
-        },
-        "rsi": {
-          "rsi": 34.4,
-          "signal": 0
-        },
-        "macd": {
-          "status": "金叉 📈",
-          "signal_strength": 2
-        },
-        "rs_rating": 99,
-        "atr_pct": 0.5398
-      },
-      "composite": {
-        "score": 82,
-        "recommendation": "STRONG_BUY",
-        "emoji": "🚀🚀🚀"
-      },
-      "risk": {
-        "entry": 489.02,
-        "stop_loss": 464.57,
-        "take_profit": 528.14,
-        "kelly_pct": 6.4,
-        "is_short": false,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "KLAC",
-      "name": "KLA",
-      "price": 143.9600067138672,
-      "indicators": {
-        "trend": {
-          "alignment": "空頭排列",
-          "signal": -3
-        },
-        "rsi": {
-          "rsi": 40.7,
-          "signal": 0
-        },
-        "macd": {
-          "status": "金叉 📈",
-          "signal_strength": 2
-        },
-        "rs_rating": 99,
-        "atr_pct": 0.2997
-      },
-      "composite": {
-        "score": 58,
-        "recommendation": "NEUTRAL",
-        "emoji": "➡️"
-      },
-      "risk": {
-        "entry": 141.08,
-        "stop_loss": 134.03,
-        "take_profit": 152.37,
-        "kelly_pct": 3.4,
-        "is_short": false,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "AMAT",
-      "name": "Applied Materials",
-      "price": 350.25,
-      "indicators": {
-        "trend": {
-          "alignment": "空頭排列",
-          "signal": -3
-        },
-        "rsi": {
-          "rsi": 38.8,
-          "signal": 0
-        },
-        "macd": {
-          "status": "金叉 📈",
-          "signal_strength": 2
-        },
-        "rs_rating": 99,
-        "atr_pct": 0.3128
-      },
-      "composite": {
-        "score": 58,
-        "recommendation": "NEUTRAL",
-        "emoji": "➡️"
-      },
-      "risk": {
-        "entry": 343.25,
-        "stop_loss": 326.08,
-        "take_profit": 370.7,
-        "kelly_pct": 3.4,
-        "is_short": false,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "INTC",
-      "name": "英特爾",
-      "price": 55.470001220703125,
-      "indicators": {
-        "trend": {
-          "alignment": "震盪整理",
-          "signal": 0
-        },
-        "rsi": {
-          "rsi": 29.9,
-          "signal": 3
-        },
-        "macd": {
-          "status": "空頭動能",
-          "signal_strength": -1
-        },
-        "rs_rating": 99,
-        "atr_pct": 0.7963
-      },
-      "composite": {
-        "score": 79,
-        "recommendation": "BUY",
-        "emoji": "🚀🚀"
-      },
-      "risk": {
-        "entry": 54.36,
-        "stop_loss": 51.64,
-        "take_profit": 58.71,
-        "kelly_pct": 6.4,
-        "is_short": false,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "QCOM",
-      "name": "高通",
-      "price": 168.52000427246094,
-      "indicators": {
-        "trend": {
-          "alignment": "震盪整理",
-          "signal": 0
-        },
-        "rsi": {
-          "rsi": 46.0,
-          "signal": 0
-        },
-        "macd": {
-          "status": "金叉 📈",
-          "signal_strength": 2
-        },
-        "rs_rating": 37,
-        "atr_pct": 0.2216
-      },
-      "composite": {
-        "score": 64,
-        "recommendation": "NEUTRAL",
-        "emoji": "➡️"
-      },
-      "risk": {
-        "entry": 165.15,
-        "stop_loss": 156.89,
-        "take_profit": 178.36,
-        "kelly_pct": 4.5,
-        "is_short": false,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "TER",
-      "name": "Teradyne",
-      "price": 231.89999389648438,
-      "indicators": {
-        "trend": {
-          "alignment": "空頭排列",
-          "signal": -3
-        },
-        "rsi": {
-          "rsi": 33.9,
-          "signal": 0
-        },
-        "macd": {
-          "status": "金叉 📈",
-          "signal_strength": 2
-        },
-        "rs_rating": 99,
-        "atr_pct": 0.6051
-      },
-      "composite": {
-        "score": 58,
-        "recommendation": "NEUTRAL",
-        "emoji": "➡️"
-      },
-      "risk": {
-        "entry": 227.26,
-        "stop_loss": 215.9,
-        "take_profit": 245.44,
-        "kelly_pct": 3.4,
-        "is_short": false,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "MU",
-      "name": "美光科技",
-      "price": 719.02001953125,
-      "indicators": {
-        "trend": {
-          "alignment": "震盪整理",
-          "signal": 0
-        },
-        "rsi": {
-          "rsi": 38.0,
+          "rsi": 32.1,
           "signal": 0
         },
         "macd": {
@@ -362,7 +464,75 @@
           "signal_strength": -1
         },
         "rs_rating": 99,
-        "atr_pct": 0.4729
+        "atr_pct": 0.8992
+      },
+      "composite": {
+        "score": 37,
+        "recommendation": "SELL",
+        "emoji": "🔻🔻"
+      },
+      "risk": {
+        "entry": 46.12,
+        "stop_loss": 48.43,
+        "take_profit": 42.43,
+        "kelly_pct": 0.0,
+        "is_short": true,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "COHR",
+      "name": "Coherent",
+      "price": 210.86000061035156,
+      "indicators": {
+        "trend": {
+          "alignment": "空頭排列",
+          "signal": -3
+        },
+        "rsi": {
+          "rsi": 44.5,
+          "signal": 0
+        },
+        "macd": {
+          "status": "多頭動能",
+          "signal_strength": 1
+        },
+        "rs_rating": 99,
+        "atr_pct": 0.411
+      },
+      "composite": {
+        "score": 51,
+        "recommendation": "NEUTRAL",
+        "emoji": "➡️"
+      },
+      "risk": {
+        "entry": 206.64,
+        "stop_loss": 196.31,
+        "take_profit": 223.17,
+        "kelly_pct": 1.7,
+        "is_short": false,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "LITE",
+      "name": "Lumentum",
+      "price": 559.969970703125,
+      "indicators": {
+        "trend": {
+          "alignment": "震盪整理",
+          "signal": 0
+        },
+        "rsi": {
+          "rsi": 36.0,
+          "signal": 0
+        },
+        "macd": {
+          "status": "空頭動能",
+          "signal_strength": -1
+        },
+        "rs_rating": 99,
+        "atr_pct": 0.8424
       },
       "composite": {
         "score": 61,
@@ -370,127 +540,25 @@
         "emoji": "➡️"
       },
       "risk": {
-        "entry": 704.64,
-        "stop_loss": 669.41,
-        "take_profit": 761.01,
-        "kelly_pct": 4.0,
+        "entry": 548.77,
+        "stop_loss": 521.33,
+        "take_profit": 592.67,
+        "kelly_pct": 3.1,
         "is_short": false,
-        "risk_note": "VIX乘數:0.9"
+        "risk_note": "VIX乘數:0.7"
       }
     },
     {
-      "code": "WDC",
-      "name": "Western Digital",
-      "price": 280.92999267578125,
+      "code": "GLW",
+      "name": "Corning",
+      "price": 108.48999786376953,
       "indicators": {
         "trend": {
           "alignment": "空頭排列",
           "signal": -3
         },
         "rsi": {
-          "rsi": 36.1,
-          "signal": 0
-        },
-        "macd": {
-          "status": "空頭動能",
-          "signal_strength": -1
-        },
-        "rs_rating": 99,
-        "atr_pct": 0.5112
-      },
-      "composite": {
-        "score": 37,
-        "recommendation": "SELL",
-        "emoji": "🔻🔻"
-      },
-      "risk": {
-        "entry": 286.55,
-        "stop_loss": 300.88,
-        "take_profit": 263.62,
-        "kelly_pct": 0.0,
-        "is_short": true,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "PLAB",
-      "name": "Photronics",
-      "price": 26.299999237060547,
-      "indicators": {
-        "trend": {
-          "alignment": "空頭排列",
-          "signal": -3
-        },
-        "rsi": {
-          "rsi": 41.0,
-          "signal": 0
-        },
-        "macd": {
-          "status": "金叉 📈",
-          "signal_strength": 2
-        },
-        "rs_rating": 51,
-        "atr_pct": 0.1852
-      },
-      "composite": {
-        "score": 40,
-        "recommendation": "SELL",
-        "emoji": "🔻🔻"
-      },
-      "risk": {
-        "entry": 26.83,
-        "stop_loss": 28.17,
-        "take_profit": 24.68,
-        "kelly_pct": 0.3,
-        "is_short": true,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "AAOI",
-      "name": "Applied Optoelectronics",
-      "price": 45.15999984741211,
-      "indicators": {
-        "trend": {
-          "alignment": "空頭排列",
-          "signal": -3
-        },
-        "rsi": {
-          "rsi": 32.0,
-          "signal": 0
-        },
-        "macd": {
-          "status": "空頭動能",
-          "signal_strength": -1
-        },
-        "rs_rating": 99,
-        "atr_pct": 0.8532
-      },
-      "composite": {
-        "score": 37,
-        "recommendation": "SELL",
-        "emoji": "🔻🔻"
-      },
-      "risk": {
-        "entry": 46.06,
-        "stop_loss": 48.37,
-        "take_profit": 42.38,
-        "kelly_pct": 0.0,
-        "is_short": true,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "MTSI",
-      "name": "MACOM",
-      "price": 220.44000244140625,
-      "indicators": {
-        "trend": {
-          "alignment": "空頭排列",
-          "signal": -3
-        },
-        "rsi": {
-          "rsi": 42.4,
+          "rsi": 38.0,
           "signal": 0
         },
         "macd": {
@@ -498,7 +566,7 @@
           "signal_strength": 2
         },
         "rs_rating": 99,
-        "atr_pct": 0.398
+        "atr_pct": 0.3221
       },
       "composite": {
         "score": 58,
@@ -506,33 +574,101 @@
         "emoji": "➡️"
       },
       "risk": {
-        "entry": 216.03,
-        "stop_loss": 205.23,
-        "take_profit": 233.31,
-        "kelly_pct": 3.4,
+        "entry": 106.32,
+        "stop_loss": 101.0,
+        "take_profit": 114.83,
+        "kelly_pct": 2.7,
         "is_short": false,
-        "risk_note": "VIX乘數:0.9"
+        "risk_note": "VIX乘數:0.7"
       }
     },
     {
-      "code": "AMZN",
-      "name": "亞馬遜",
-      "price": 257.75,
+      "code": "MTSI",
+      "name": "MACOM",
+      "price": 227.36000061035156,
       "indicators": {
         "trend": {
-          "alignment": "多頭排列",
-          "signal": 3
+          "alignment": "空頭排列",
+          "signal": -3
         },
         "rsi": {
-          "rsi": 49.6,
+          "rsi": 44.6,
+          "signal": 0
+        },
+        "macd": {
+          "status": "金叉 📈",
+          "signal_strength": 2
+        },
+        "rs_rating": 99,
+        "atr_pct": 0.3859
+      },
+      "composite": {
+        "score": 58,
+        "recommendation": "NEUTRAL",
+        "emoji": "➡️"
+      },
+      "risk": {
+        "entry": 222.81,
+        "stop_loss": 211.67,
+        "take_profit": 240.64,
+        "kelly_pct": 2.7,
+        "is_short": false,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "VIAV",
+      "name": "Viavi Solutions",
+      "price": 29.770000457763672,
+      "indicators": {
+        "trend": {
+          "alignment": "空頭排列",
+          "signal": -3
+        },
+        "rsi": {
+          "rsi": 43.5,
           "signal": 0
         },
         "macd": {
           "status": "多頭動能",
           "signal_strength": 1
         },
-        "rs_rating": 83,
-        "atr_pct": 0.1784
+        "rs_rating": 99,
+        "atr_pct": 0.4162
+      },
+      "composite": {
+        "score": 51,
+        "recommendation": "NEUTRAL",
+        "emoji": "➡️"
+      },
+      "risk": {
+        "entry": 29.17,
+        "stop_loss": 27.72,
+        "take_profit": 31.51,
+        "kelly_pct": 1.7,
+        "is_short": false,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "AMZN",
+      "name": "亞馬遜",
+      "price": 257.8900146484375,
+      "indicators": {
+        "trend": {
+          "alignment": "多頭排列",
+          "signal": 3
+        },
+        "rsi": {
+          "rsi": 49.7,
+          "signal": 0
+        },
+        "macd": {
+          "status": "多頭動能",
+          "signal_strength": 1
+        },
+        "rs_rating": 82,
+        "atr_pct": 0.1783
       },
       "composite": {
         "score": 93,
@@ -540,305 +676,67 @@
         "emoji": "🚀🚀🚀"
       },
       "risk": {
-        "entry": 252.59,
-        "stop_loss": 239.97,
-        "take_profit": 272.8,
-        "kelly_pct": 6.4,
+        "entry": 252.73,
+        "stop_loss": 240.1,
+        "take_profit": 272.95,
+        "kelly_pct": 5.0,
         "is_short": false,
-        "risk_note": "VIX乘數:0.9"
+        "risk_note": "VIX乘數:0.7"
       }
     },
     {
-      "code": "COHR",
-      "name": "Coherent",
-      "price": 203.42999267578125,
-      "indicators": {
-        "trend": {
-          "alignment": "空頭排列",
-          "signal": -3
-        },
-        "rsi": {
-          "rsi": 42.3,
-          "signal": 0
-        },
-        "macd": {
-          "status": "金叉 📈",
-          "signal_strength": 2
-        },
-        "rs_rating": 99,
-        "atr_pct": 0.426
-      },
-      "composite": {
-        "score": 58,
-        "recommendation": "NEUTRAL",
-        "emoji": "➡️"
-      },
-      "risk": {
-        "entry": 199.36,
-        "stop_loss": 189.39,
-        "take_profit": 215.31,
-        "kelly_pct": 3.4,
-        "is_short": false,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "LITE",
-      "name": "Lumentum",
-      "price": 546.0,
-      "indicators": {
-        "trend": {
-          "alignment": "震盪整理",
-          "signal": 0
-        },
-        "rsi": {
-          "rsi": 34.5,
-          "signal": 0
-        },
-        "macd": {
-          "status": "空頭動能",
-          "signal_strength": -1
-        },
-        "rs_rating": 99,
-        "atr_pct": 0.8639
-      },
-      "composite": {
-        "score": 61,
-        "recommendation": "NEUTRAL",
-        "emoji": "➡️"
-      },
-      "risk": {
-        "entry": 535.08,
-        "stop_loss": 508.33,
-        "take_profit": 577.89,
-        "kelly_pct": 4.0,
-        "is_short": false,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "NVDA",
-      "name": "英偉達",
-      "price": 156.13999938964844,
-      "indicators": {
-        "trend": {
-          "alignment": "震盪整理",
-          "signal": 0
-        },
-        "rsi": {
-          "rsi": 22.7,
-          "signal": 3
-        },
-        "macd": {
-          "status": "空頭動能",
-          "signal_strength": -1
-        },
-        "rs_rating": 53,
-        "atr_pct": 0.47
-      },
-      "composite": {
-        "score": 61,
-        "recommendation": "NEUTRAL",
-        "emoji": "➡️"
-      },
-      "risk": {
-        "entry": 153.02,
-        "stop_loss": 145.37,
-        "take_profit": 165.26,
-        "kelly_pct": 4.0,
-        "is_short": false,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "GLW",
-      "name": "Corning",
-      "price": 106.16999816894531,
-      "indicators": {
-        "trend": {
-          "alignment": "空頭排列",
-          "signal": -3
-        },
-        "rsi": {
-          "rsi": 35.9,
-          "signal": 0
-        },
-        "macd": {
-          "status": "金叉 📈",
-          "signal_strength": 2
-        },
-        "rs_rating": 99,
-        "atr_pct": 0.3291
-      },
-      "composite": {
-        "score": 58,
-        "recommendation": "NEUTRAL",
-        "emoji": "➡️"
-      },
-      "risk": {
-        "entry": 104.05,
-        "stop_loss": 98.84,
-        "take_profit": 112.37,
-        "kelly_pct": 3.4,
-        "is_short": false,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "TSLA",
-      "name": "特斯拉",
-      "price": 379.739990234375,
-      "indicators": {
-        "trend": {
-          "alignment": "震盪整理",
-          "signal": 0
-        },
-        "rsi": {
-          "rsi": 49.5,
-          "signal": 0
-        },
-        "macd": {
-          "status": "空頭動能",
-          "signal_strength": -1
-        },
-        "rs_rating": 54,
-        "atr_pct": 0.2003
-      },
-      "composite": {
-        "score": 43,
-        "recommendation": "SELL",
-        "emoji": "🔻🔻"
-      },
-      "risk": {
-        "entry": 387.33,
-        "stop_loss": 406.7,
-        "take_profit": 356.35,
-        "kelly_pct": 0.8,
-        "is_short": true,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "GOOGL",
-      "name": "谷歌",
-      "price": 283.7200012207031,
-      "indicators": {
-        "trend": {
-          "alignment": "空頭排列",
-          "signal": -3
-        },
-        "rsi": {
-          "rsi": 34.5,
-          "signal": 0
-        },
-        "macd": {
-          "status": "金叉 📈",
-          "signal_strength": 2
-        },
-        "rs_rating": 99,
-        "atr_pct": 0.2391
-      },
-      "composite": {
-        "score": 58,
-        "recommendation": "NEUTRAL",
-        "emoji": "➡️"
-      },
-      "risk": {
-        "entry": 278.05,
-        "stop_loss": 264.14,
-        "take_profit": 300.29,
-        "kelly_pct": 3.4,
-        "is_short": false,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "AAPL",
-      "name": "蘋果",
-      "price": 352.7799987792969,
+      "code": "MSFT",
+      "name": "微軟",
+      "price": 506.239990234375,
       "indicators": {
         "trend": {
           "alignment": "多頭排列",
           "signal": 3
         },
         "rsi": {
-          "rsi": 57.0,
+          "rsi": 41.9,
           "signal": 0
         },
         "macd": {
-          "status": "金叉 📈",
-          "signal_strength": 2
+          "status": "空頭動能",
+          "signal_strength": -1
         },
-        "rs_rating": 99,
-        "atr_pct": 0.1006
+        "rs_rating": 71,
+        "atr_pct": 0.1237
       },
       "composite": {
-        "score": 100,
-        "recommendation": "STRONG_BUY",
-        "emoji": "🚀🚀🚀"
+        "score": 73,
+        "recommendation": "BUY",
+        "emoji": "🚀🚀"
       },
       "risk": {
-        "entry": 345.72,
-        "stop_loss": 328.44,
-        "take_profit": 373.38,
-        "kelly_pct": 6.4,
+        "entry": 496.12,
+        "stop_loss": 471.31,
+        "take_profit": 535.8,
+        "kelly_pct": 4.7,
         "is_short": false,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "VIAV",
-      "name": "Viavi Solutions",
-      "price": 28.729999542236328,
-      "indicators": {
-        "trend": {
-          "alignment": "空頭排列",
-          "signal": -3
-        },
-        "rsi": {
-          "rsi": 41.0,
-          "signal": 0
-        },
-        "macd": {
-          "status": "金叉 📈",
-          "signal_strength": 2
-        },
-        "rs_rating": 99,
-        "atr_pct": 0.4313
-      },
-      "composite": {
-        "score": 58,
-        "recommendation": "NEUTRAL",
-        "emoji": "➡️"
-      },
-      "risk": {
-        "entry": 28.16,
-        "stop_loss": 26.75,
-        "take_profit": 30.41,
-        "kelly_pct": 3.4,
-        "is_short": false,
-        "risk_note": "VIX乘數:0.9"
+        "risk_note": "VIX乘數:0.7"
       }
     },
     {
       "code": "META",
       "name": "Meta",
-      "price": 626.4099731445312,
+      "price": 618.8699951171875,
       "indicators": {
         "trend": {
           "alignment": "震盪整理",
           "signal": 0
         },
         "rsi": {
-          "rsi": 43.9,
+          "rsi": 42.0,
           "signal": 0
         },
         "macd": {
           "status": "金叉 📈",
           "signal_strength": 2
         },
-        "rs_rating": 56,
-        "atr_pct": 0.2066
+        "rs_rating": 53,
+        "atr_pct": 0.2091
       },
       "composite": {
         "score": 64,
@@ -846,93 +744,195 @@
         "emoji": "➡️"
       },
       "risk": {
-        "entry": 613.88,
-        "stop_loss": 583.19,
-        "take_profit": 662.99,
-        "kelly_pct": 4.5,
+        "entry": 606.49,
+        "stop_loss": 576.17,
+        "take_profit": 655.01,
+        "kelly_pct": 3.5,
         "is_short": false,
-        "risk_note": "VIX乘數:0.9"
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "NVDA",
+      "name": "英偉達",
+      "price": 155.4600067138672,
+      "indicators": {
+        "trend": {
+          "alignment": "震盪整理",
+          "signal": 0
+        },
+        "rsi": {
+          "rsi": 22.5,
+          "signal": 3
+        },
+        "macd": {
+          "status": "空頭動能",
+          "signal_strength": -1
+        },
+        "rs_rating": 51,
+        "atr_pct": 0.4721
+      },
+      "composite": {
+        "score": 61,
+        "recommendation": "NEUTRAL",
+        "emoji": "➡️"
+      },
+      "risk": {
+        "entry": 152.35,
+        "stop_loss": 144.73,
+        "take_profit": 164.54,
+        "kelly_pct": 3.1,
+        "is_short": false,
+        "risk_note": "VIX乘數:0.7"
       }
     },
     {
       "code": "NFLX",
       "name": "Netflix",
-      "price": 60.75,
+      "price": 59.68000030517578,
       "indicators": {
         "trend": {
           "alignment": "空頭排列",
           "signal": -3
         },
         "rsi": {
-          "rsi": 35.2,
-          "signal": 0
-        },
-        "macd": {
-          "status": "多頭動能",
-          "signal_strength": 1
-        },
-        "rs_rating": 1,
-        "atr_pct": 0.1676
-      },
-      "composite": {
-        "score": 33,
-        "recommendation": "SELL",
-        "emoji": "🔻🔻"
-      },
-      "risk": {
-        "entry": 61.97,
-        "stop_loss": 65.06,
-        "take_profit": 57.01,
-        "kelly_pct": 0.0,
-        "is_short": true,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "MSFT",
-      "name": "微軟",
-      "price": 517.989990234375,
-      "indicators": {
-        "trend": {
-          "alignment": "多頭排列",
-          "signal": 3
-        },
-        "rsi": {
-          "rsi": 46.4,
+          "rsi": 33.0,
           "signal": 0
         },
         "macd": {
           "status": "死叉 📉",
           "signal_strength": -2
         },
-        "rs_rating": 77,
-        "atr_pct": 0.1046
+        "rs_rating": 1,
+        "atr_pct": 0.141
       },
       "composite": {
-        "score": 66,
-        "recommendation": "BUY",
-        "emoji": "🚀🚀"
+        "score": 12,
+        "recommendation": "SELL",
+        "emoji": "🔻🔻"
       },
       "risk": {
-        "entry": 507.63,
-        "stop_loss": 482.25,
-        "take_profit": 548.24,
-        "kelly_pct": 4.8,
-        "is_short": false,
-        "risk_note": "VIX乘數:0.9"
+        "entry": 60.87,
+        "stop_loss": 63.92,
+        "take_profit": 56.0,
+        "kelly_pct": 0.0,
+        "is_short": true,
+        "risk_note": "VIX乘數:0.7"
       }
     },
     {
-      "code": "COIN",
-      "name": "Coinbase",
-      "price": 119.83999633789062,
+      "code": "TSLA",
+      "name": "特斯拉",
+      "price": 380.1099853515625,
       "indicators": {
         "trend": {
-          "alignment": "空頭排列",
-          "signal": -3
+          "alignment": "震盪整理",
+          "signal": 0
         },
         "rsi": {
-          "rsi": 29.2,
+          "rsi": 49.6,
+          "signal": 0
+        },
+        "macd": {
+          "status": "空頭動能",
+          "signal_strength": -1
+        },
+        "rs_rating": 54,
+        "atr_pct": 0.2002
+      },
+      "composite": {
+        "score": 43,
+        "recommendation": "SELL",
+        "emoji": "🔻🔻"
+      },
+      "risk": {
+        "entry": 387.71,
+        "stop_loss": 407.1,
+        "take_profit": 356.7,
+        "kelly_pct": 0.6,
+        "is_short": true,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "ADBE",
+      "name": "Adobe",
+      "price": 235.5500030517578,
+      "indicators": {
+        "trend": {
+          "alignment": "震盪整理",
+          "signal": 0
+        },
+        "rsi": {
+          "rsi": 41.5,
+          "signal": 0
+        },
+        "macd": {
+          "status": "空頭動能",
+          "signal_strength": -1
+        },
+        "rs_rating": 1,
+        "atr_pct": 0.171
+      },
+      "composite": {
+        "score": 43,
+        "recommendation": "SELL",
+        "emoji": "🔻🔻"
+      },
+      "risk": {
+        "entry": 240.26,
+        "stop_loss": 252.27,
+        "take_profit": 221.04,
+        "kelly_pct": 0.6,
+        "is_short": true,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "COST",
+      "name": "好市多",
+      "price": 1110.0799560546875,
+      "indicators": {
+        "trend": {
+          "alignment": "震盪整理",
+          "signal": 0
+        },
+        "rsi": {
+          "rsi": 75.3,
+          "signal": -3
+        },
+        "macd": {
+          "status": "多頭動能",
+          "signal_strength": 1
+        },
+        "rs_rating": 69,
+        "atr_pct": 0.1291
+      },
+      "composite": {
+        "score": 39,
+        "recommendation": "SELL",
+        "emoji": "🔻🔻"
+      },
+      "risk": {
+        "entry": 1132.28,
+        "stop_loss": 1188.9,
+        "take_profit": 1041.7,
+        "kelly_pct": 0.1,
+        "is_short": true,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "CRM",
+      "name": "Salesforce",
+      "price": 194.52000427246094,
+      "indicators": {
+        "trend": {
+          "alignment": "震盪整理",
+          "signal": 0
+        },
+        "rsi": {
+          "rsi": 25.7,
           "signal": 3
         },
         "macd": {
@@ -940,7 +940,143 @@
           "signal_strength": -1
         },
         "rs_rating": 1,
-        "atr_pct": 0.528
+        "atr_pct": 0.3034
+      },
+      "composite": {
+        "score": 61,
+        "recommendation": "NEUTRAL",
+        "emoji": "➡️"
+      },
+      "risk": {
+        "entry": 190.63,
+        "stop_loss": 181.1,
+        "take_profit": 205.88,
+        "kelly_pct": 3.1,
+        "is_short": false,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "SNOW",
+      "name": "Snowflake",
+      "price": 272.94000244140625,
+      "indicators": {
+        "trend": {
+          "alignment": "震盪整理",
+          "signal": 0
+        },
+        "rsi": {
+          "rsi": 35.7,
+          "signal": 0
+        },
+        "macd": {
+          "status": "空頭動能",
+          "signal_strength": -1
+        },
+        "rs_rating": 99,
+        "atr_pct": 0.292
+      },
+      "composite": {
+        "score": 61,
+        "recommendation": "NEUTRAL",
+        "emoji": "➡️"
+      },
+      "risk": {
+        "entry": 267.48,
+        "stop_loss": 254.11,
+        "take_profit": 288.88,
+        "kelly_pct": 3.1,
+        "is_short": false,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "PLTR",
+      "name": "Palantir",
+      "price": 156.55999755859375,
+      "indicators": {
+        "trend": {
+          "alignment": "震盪整理",
+          "signal": 0
+        },
+        "rsi": {
+          "rsi": 32.8,
+          "signal": 0
+        },
+        "macd": {
+          "status": "空頭動能",
+          "signal_strength": -1
+        },
+        "rs_rating": 99,
+        "atr_pct": 0.3196
+      },
+      "composite": {
+        "score": 61,
+        "recommendation": "NEUTRAL",
+        "emoji": "➡️"
+      },
+      "risk": {
+        "entry": 153.43,
+        "stop_loss": 145.76,
+        "take_profit": 165.7,
+        "kelly_pct": 3.1,
+        "is_short": false,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "UBER",
+      "name": "Uber",
+      "price": 68.80999755859375,
+      "indicators": {
+        "trend": {
+          "alignment": "空頭排列",
+          "signal": -3
+        },
+        "rsi": {
+          "rsi": 49.1,
+          "signal": 0
+        },
+        "macd": {
+          "status": "多頭動能",
+          "signal_strength": 1
+        },
+        "rs_rating": 30,
+        "atr_pct": 0.1229
+      },
+      "composite": {
+        "score": 33,
+        "recommendation": "SELL",
+        "emoji": "🔻🔻"
+      },
+      "risk": {
+        "entry": 70.19,
+        "stop_loss": 73.7,
+        "take_profit": 64.57,
+        "kelly_pct": 0.0,
+        "is_short": true,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "COIN",
+      "name": "Coinbase",
+      "price": 115.0199966430664,
+      "indicators": {
+        "trend": {
+          "alignment": "空頭排列",
+          "signal": -3
+        },
+        "rsi": {
+          "rsi": 27.4,
+          "signal": 3
+        },
+        "macd": {
+          "status": "空頭動能",
+          "signal_strength": -1
+        },
+        "rs_rating": 1,
+        "atr_pct": 0.578
       },
       "composite": {
         "score": 37,
@@ -948,305 +1084,67 @@
         "emoji": "🔻🔻"
       },
       "risk": {
-        "entry": 122.24,
-        "stop_loss": 128.35,
-        "take_profit": 112.46,
+        "entry": 117.32,
+        "stop_loss": 123.19,
+        "take_profit": 107.93,
         "kelly_pct": 0.0,
         "is_short": true,
-        "risk_note": "VIX乘數:0.9"
+        "risk_note": "VIX乘數:0.7"
       }
     },
     {
-      "code": "PLTR",
-      "name": "Palantir",
-      "price": 160.38999938964844,
-      "indicators": {
-        "trend": {
-          "alignment": "震盪整理",
-          "signal": 0
-        },
-        "rsi": {
-          "rsi": 34.9,
-          "signal": 0
-        },
-        "macd": {
-          "status": "空頭動能",
-          "signal_strength": -1
-        },
-        "rs_rating": 99,
-        "atr_pct": 0.3119
-      },
-      "composite": {
-        "score": 61,
-        "recommendation": "NEUTRAL",
-        "emoji": "➡️"
-      },
-      "risk": {
-        "entry": 157.18,
-        "stop_loss": 149.32,
-        "take_profit": 169.76,
-        "kelly_pct": 4.0,
-        "is_short": false,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "SNOW",
-      "name": "Snowflake",
-      "price": 280.5400085449219,
-      "indicators": {
-        "trend": {
-          "alignment": "震盪整理",
-          "signal": 0
-        },
-        "rsi": {
-          "rsi": 38.1,
-          "signal": 0
-        },
-        "macd": {
-          "status": "空頭動能",
-          "signal_strength": -1
-        },
-        "rs_rating": 99,
-        "atr_pct": 0.2752
-      },
-      "composite": {
-        "score": 61,
-        "recommendation": "NEUTRAL",
-        "emoji": "➡️"
-      },
-      "risk": {
-        "entry": 274.93,
-        "stop_loss": 261.18,
-        "take_profit": 296.92,
-        "kelly_pct": 4.0,
-        "is_short": false,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "ADBE",
-      "name": "Adobe",
-      "price": 246.0,
-      "indicators": {
-        "trend": {
-          "alignment": "震盪整理",
-          "signal": 0
-        },
-        "rsi": {
-          "rsi": 50.3,
-          "signal": 0
-        },
-        "macd": {
-          "status": "空頭動能",
-          "signal_strength": -1
-        },
-        "rs_rating": 1,
-        "atr_pct": 0.1637
-      },
-      "composite": {
-        "score": 43,
-        "recommendation": "SELL",
-        "emoji": "🔻🔻"
-      },
-      "risk": {
-        "entry": 250.92,
-        "stop_loss": 263.47,
-        "take_profit": 230.85,
-        "kelly_pct": 0.8,
-        "is_short": true,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "PYPL",
-      "name": "PayPal",
-      "price": 58.83000183105469,
+      "code": "AAPL",
+      "name": "蘋果",
+      "price": 351.9100036621094,
       "indicators": {
         "trend": {
           "alignment": "多頭排列",
           "signal": 3
         },
         "rsi": {
-          "rsi": 55.4,
+          "rsi": 56.1,
           "signal": 0
         },
         "macd": {
-          "status": "死叉 📉",
-          "signal_strength": -2
+          "status": "金叉 📈",
+          "signal_strength": 2
         },
-        "rs_rating": 1,
-        "atr_pct": 0.111
+        "rs_rating": 99,
+        "atr_pct": 0.1009
       },
       "composite": {
-        "score": 60,
-        "recommendation": "NEUTRAL",
-        "emoji": "➡️"
-      },
-      "risk": {
-        "entry": 57.65,
-        "stop_loss": 54.77,
-        "take_profit": 62.27,
-        "kelly_pct": 3.8,
-        "is_short": false,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "UBER",
-      "name": "Uber",
-      "price": 69.98999786376953,
-      "indicators": {
-        "trend": {
-          "alignment": "空頭排列",
-          "signal": -3
-        },
-        "rsi": {
-          "rsi": 53.5,
-          "signal": 0
-        },
-        "macd": {
-          "status": "多頭動能",
-          "signal_strength": 1
-        },
-        "rs_rating": 34,
-        "atr_pct": 0.1209
-      },
-      "composite": {
-        "score": 33,
-        "recommendation": "SELL",
-        "emoji": "🔻🔻"
-      },
-      "risk": {
-        "entry": 71.39,
-        "stop_loss": 74.96,
-        "take_profit": 65.68,
-        "kelly_pct": 0.0,
-        "is_short": true,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "COST",
-      "name": "好市多",
-      "price": 1113.739990234375,
-      "indicators": {
-        "trend": {
-          "alignment": "震盪整理",
-          "signal": 0
-        },
-        "rsi": {
-          "rsi": 77.1,
-          "signal": -3
-        },
-        "macd": {
-          "status": "多頭動能",
-          "signal_strength": 1
-        },
-        "rs_rating": 71,
-        "atr_pct": 0.1227
-      },
-      "composite": {
-        "score": 45,
-        "recommendation": "NEUTRAL",
-        "emoji": "➡️"
-      },
-      "risk": {
-        "entry": 1091.47,
-        "stop_loss": 1036.89,
-        "take_profit": 1178.78,
-        "kelly_pct": 1.1,
-        "is_short": false,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "CRM",
-      "name": "Salesforce",
-      "price": 214.8300018310547,
-      "indicators": {
-        "trend": {
-          "alignment": "震盪整理",
-          "signal": 0
-        },
-        "rsi": {
-          "rsi": 37.1,
-          "signal": 0
-        },
-        "macd": {
-          "status": "空頭動能",
-          "signal_strength": -1
-        },
-        "rs_rating": 1,
-        "atr_pct": 0.2027
-      },
-      "composite": {
-        "score": 43,
-        "recommendation": "SELL",
-        "emoji": "🔻🔻"
-      },
-      "risk": {
-        "entry": 219.13,
-        "stop_loss": 230.08,
-        "take_profit": 201.6,
-        "kelly_pct": 0.8,
-        "is_short": true,
-        "risk_note": "VIX乘數:0.9"
-      }
-    },
-    {
-      "code": "DIS",
-      "name": "迪士尼",
-      "price": 118.69999694824219,
-      "indicators": {
-        "trend": {
-          "alignment": "多頭排列",
-          "signal": 3
-        },
-        "rsi": {
-          "rsi": 65.9,
-          "signal": 0
-        },
-        "macd": {
-          "status": "多頭動能",
-          "signal_strength": 1
-        },
-        "rs_rating": 41,
-        "atr_pct": 0.1015
-      },
-      "composite": {
-        "score": 81,
+        "score": 100,
         "recommendation": "STRONG_BUY",
         "emoji": "🚀🚀🚀"
       },
       "risk": {
-        "entry": 116.33,
-        "stop_loss": 110.51,
-        "take_profit": 125.63,
-        "kelly_pct": 6.4,
+        "entry": 344.87,
+        "stop_loss": 327.63,
+        "take_profit": 372.46,
+        "kelly_pct": 5.0,
         "is_short": false,
-        "risk_note": "VIX乘數:0.9"
+        "risk_note": "VIX乘數:0.7"
       }
     },
     {
       "code": "V",
       "name": "Visa",
-      "price": 426.4599914550781,
+      "price": 416.7699890136719,
       "indicators": {
         "trend": {
           "alignment": "多頭排列",
           "signal": 3
         },
         "rsi": {
-          "rsi": 63.3,
+          "rsi": 54.4,
           "signal": 0
         },
         "macd": {
           "status": "死叉 📉",
           "signal_strength": -2
         },
-        "rs_rating": 99,
-        "atr_pct": 0.1131
+        "rs_rating": 92,
+        "atr_pct": 0.1157
       },
       "composite": {
         "score": 78,
@@ -1254,46 +1152,148 @@
         "emoji": "🚀🚀"
       },
       "risk": {
-        "entry": 417.93,
-        "stop_loss": 397.03,
-        "take_profit": 451.37,
-        "kelly_pct": 6.4,
+        "entry": 408.43,
+        "stop_loss": 388.01,
+        "take_profit": 441.11,
+        "kelly_pct": 5.0,
         "is_short": false,
-        "risk_note": "VIX乘數:0.9"
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "PYPL",
+      "name": "PayPal",
+      "price": 58.11000061035156,
+      "indicators": {
+        "trend": {
+          "alignment": "多頭排列",
+          "signal": 3
+        },
+        "rsi": {
+          "rsi": 51.9,
+          "signal": 0
+        },
+        "macd": {
+          "status": "死叉 📉",
+          "signal_strength": -2
+        },
+        "rs_rating": 1,
+        "atr_pct": 0.1124
+      },
+      "composite": {
+        "score": 60,
+        "recommendation": "NEUTRAL",
+        "emoji": "➡️"
+      },
+      "risk": {
+        "entry": 56.95,
+        "stop_loss": 54.1,
+        "take_profit": 61.5,
+        "kelly_pct": 2.9,
+        "is_short": false,
+        "risk_note": "VIX乘數:0.7"
       }
     },
     {
       "code": "JPM",
       "name": "摩根大通",
-      "price": 338.2099914550781,
+      "price": 329.9599914550781,
       "indicators": {
         "trend": {
           "alignment": "震盪整理",
           "signal": 0
         },
         "rsi": {
-          "rsi": 48.4,
+          "rsi": 42.0,
+          "signal": 0
+        },
+        "macd": {
+          "status": "死叉 📉",
+          "signal_strength": -2
+        },
+        "rs_rating": 94,
+        "atr_pct": 0.0941
+      },
+      "composite": {
+        "score": 54,
+        "recommendation": "NEUTRAL",
+        "emoji": "➡️"
+      },
+      "risk": {
+        "entry": 323.36,
+        "stop_loss": 307.19,
+        "take_profit": 349.23,
+        "kelly_pct": 2.3,
+        "is_short": false,
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "DIS",
+      "name": "迪士尼",
+      "price": 116.94000244140625,
+      "indicators": {
+        "trend": {
+          "alignment": "多頭排列",
+          "signal": 3
+        },
+        "rsi": {
+          "rsi": 59.0,
           "signal": 0
         },
         "macd": {
           "status": "多頭動能",
           "signal_strength": 1
         },
-        "rs_rating": 99,
-        "atr_pct": 0.0869
+        "rs_rating": 37,
+        "atr_pct": 0.1195
       },
       "composite": {
-        "score": 75,
-        "recommendation": "BUY",
-        "emoji": "🚀🚀"
+        "score": 81,
+        "recommendation": "STRONG_BUY",
+        "emoji": "🚀🚀🚀"
       },
       "risk": {
-        "entry": 331.45,
-        "stop_loss": 314.87,
-        "take_profit": 357.96,
-        "kelly_pct": 7.4,
+        "entry": 114.6,
+        "stop_loss": 108.87,
+        "take_profit": 123.77,
+        "kelly_pct": 5.0,
         "is_short": false,
-        "risk_note": "VIX乘數:0.9"
+        "risk_note": "VIX乘數:0.7"
+      }
+    },
+    {
+      "code": "GOOGL",
+      "name": "谷歌",
+      "price": 280.20001220703125,
+      "indicators": {
+        "trend": {
+          "alignment": "空頭排列",
+          "signal": -3
+        },
+        "rsi": {
+          "rsi": 32.9,
+          "signal": 0
+        },
+        "macd": {
+          "status": "金叉 📈",
+          "signal_strength": 2
+        },
+        "rs_rating": 99,
+        "atr_pct": 0.2154
+      },
+      "composite": {
+        "score": 58,
+        "recommendation": "NEUTRAL",
+        "emoji": "➡️"
+      },
+      "risk": {
+        "entry": 274.6,
+        "stop_loss": 260.87,
+        "take_profit": 296.56,
+        "kelly_pct": 2.7,
+        "is_short": false,
+        "risk_note": "VIX乘數:0.7"
       }
     }
   ]
